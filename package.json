@@ -1,0 +1,25 @@
+{
+  "name": "terraform-change-pr-commenter",
+  "version": "1.0.0",
+  "description": "GitHub Action to read changes from Terraform plan JSON, summarize changes, and post them in a GitHub Pull Request Comment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liatrio/terraform-change-pr-commenter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liatrio/terraform-change-pr-commenter/issues"
+  },
+  "homepage": "https://github.com/liatrio/terraform-change-pr-commenter#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "fs": "^0.0.1-security"
+  }
+}
