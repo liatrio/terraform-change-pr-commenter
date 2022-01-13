@@ -8476,13 +8476,13 @@ try {
     changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.'
 
     const output = `
-    #### Terraform Plan 
-    <details><summary>${summary}</summary>
+#### Terraform Plan 
+<details><summary>${summary}</summary>
 
-    \`\`\`diff
-    ${message}
-    \`\`\`
-    </details>`;
+\`\`\`diff
+${message}
+\`\`\`
+</details>`;
     const myToken = core.getInput('github-token');
     const octokit = github.getOctokit(myToken);
 
