@@ -1,6 +1,5 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const fs = require('fs');
 
 const tfplanJsonFile = core.getInput('json-file');
 
