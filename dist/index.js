@@ -8489,7 +8489,9 @@ try {
     const context = github.context;
 
     octokit.rest.issues.createComment({
-        ...context.repo,
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         body: output
     });
 
