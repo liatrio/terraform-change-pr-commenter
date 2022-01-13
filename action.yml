@@ -5,7 +5,10 @@ inputs:
     description: 'File location for the Terraform Plan JSON file'
     required: false
     default: 'tfplan.json'
-
+  github-token:
+    description: 'GitHub Token'
+    required: false
+    default: ${{github.token}}
 runs:
   using: 'node16'
   main: 'dist/index.js'

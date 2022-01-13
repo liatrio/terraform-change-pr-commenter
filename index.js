@@ -39,6 +39,8 @@ try {
     ${message}
     \`\`\`
     </details>`;
+    const myToken = core.getInput('github-token');
+    const octokit = github.getOctokit(myToken);
 
     const context = github.context;
 
