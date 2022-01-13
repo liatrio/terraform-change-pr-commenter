@@ -8460,28 +8460,25 @@ try {
     let message = "";
 
     for (const action in trackedChanges){
-    if(changes.filter(obj => obj.change.actions.includes(action)).length === 0){
-        continue
-    }
-    message += '#### Resources to ${action}: \n'
-    for (const change of changes.filter(obj => obj.change.actions.includes(action))){
-        message += `${trackedChanges[change.change.actions[0]]} ${change.address}\n`
-    }
-    message += '\n'
+        if(changes.filter(obj => obj.change.actions.includes(action)).length === 0){
+            continue
+        }
+        message += `#### Resources to ${action}: \n\n`
+        message += '```diff'
+        for (const change of changes.filter(obj => obj.change.actions.includes(action))){
+            message += `${trackedChanges[change.change.actions[0]]} ${change.address}\n`
+        }
+        message += '```\n\n'
     }
 
-    const summary = 'Plan: ' +
+    const summary = '<b>Terraform Plan: ' +
     changes.filter(obj => obj.change.actions[0] === "create").length + ' to add, ' +
     changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' + 
-    changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.'
+    changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
     const output = `
-#### Terraform Plan 
 <details><summary>${summary}</summary>
-
-\`\`\`diff
 ${message}
-\`\`\`
 </details>`;
     const myToken = core.getInput('github-token');
     const octokit = github.getOctokit(myToken);
