@@ -1,9 +1,9 @@
 name: 'Terraform Change PR Commenter'
 description: 'Parse changes from Terraform Plan JSON and post them for PR review'
 inputs:
-  tfplan-json-file: # terraform plan output file from terraform show -no-color -json output.plan > tfplan.json
+  json-file: # terraform plan output file from terraform show -no-color -json output.plan > tfplan.json
     description: 'File location for the Terraform Plan JSON file'
-    required: true
+    required: false
     default: 'tfplan.json'
 
 runs:
