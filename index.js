@@ -19,8 +19,8 @@ try {
         if(changes.filter(obj => obj.change.actions.includes(action)).length === 0){
             continue
         }
-        message += `#### Resources to ${action}: \n\n`
-        message += '```diff'
+        message += `\n#### Resources to ${action}: \n\n`
+        message += '```diff\n'
         for (const change of changes.filter(obj => obj.change.actions.includes(action))){
             message += `${trackedChanges[change.change.actions[0]]} ${change.address}\n`
         }
