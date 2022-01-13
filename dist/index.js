@@ -8444,6 +8444,7 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(9935);
 const github = __nccwpck_require__(2835);
+const fs = __nccwpck_require__(7147);
 
 const tfplanJsonFile = core.getInput('json-file');
 
