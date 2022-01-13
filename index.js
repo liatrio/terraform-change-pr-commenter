@@ -42,7 +42,7 @@ try {
 
     const context = github.context;
 
-    const prComment = await octokit.rest.issues.createComment({
+    octokit.rest.issues.createComment({
         ...context.repo,
         body: output
     });

@@ -8484,12 +8484,13 @@ try {
     \`\`\`
     </details>`;
 
-    github.issues.createComment({
-        issue_number: context.issue.number,
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+    const context = github.context;
+
+    octokit.rest.issues.createComment({
+        ...context.repo,
         body: output
-    })
+    });
+
 } catch (error) {
     core.setFailed(error.message);
 }
