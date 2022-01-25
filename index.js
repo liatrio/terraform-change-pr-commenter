@@ -10,38 +10,40 @@ const trackedChanges = {
     "update": "!"
 }
 
-const changes = JSON.parse(fs.readFileSync(tfplanJsonFile)).resource_changes;
+const myToken = core.getInput('github-token');
+const octokit = github.getOctokit(myToken);
+
+const context = github.context;
+
+if (context.eventName === 'pull_request') {
+    core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+} else {
+    core.warning("Action doesn't seem to be running in a PR workflow context.")
+    core.warning("Skipping comment creation.")
+    return;
+}
 
 try {
-    const myToken = core.getInput('github-token');
-    const octokit = github.getOctokit(myToken);
-
-    const context = github.context;
-
-    if (!context?.issue?.number){
-        console.log("Action doesn't seem to be running in a PR context")
-        console.log("Skipping comment creation")
-        return;
-    }
+    const changes = JSON.parse(fs.readFileSync(tfplanJsonFile)).resource_changes;
 
     let message = "";
 
-    for (const action in trackedChanges){
-        if(changes.filter(obj => obj.change.actions.includes(action)).length === 0){
+    for (const action in trackedChanges) {
+        if (changes.filter(obj => obj.change.actions.includes(action)).length === 0) {
             continue
         }
         message += `\n#### Resources to ${action}: \n\n`
         message += '```diff\n'
-        for (const change of changes.filter(obj => obj.change.actions.includes(action))){
+        for (const change of changes.filter(obj => obj.change.actions.includes(action))) {
             message += `${trackedChanges[change.change.actions[0]]} ${change.address}\n`
         }
         message += '```\n\n'
     }
 
     const summary = '<b>Terraform Plan: ' +
-    changes.filter(obj => obj.change.actions[0] === "create").length + ' to add, ' +
-    changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' + 
-    changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
+        changes.filter(obj => obj.change.actions[0] === "create").length + ' to add, ' +
+        changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
+        changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
     const output = `
 <details><summary>${summary}</summary>
