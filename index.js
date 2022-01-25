@@ -13,6 +13,17 @@ const trackedChanges = {
 const changes = JSON.parse(fs.readFileSync(tfplanJsonFile)).resource_changes;
 
 try {
+    const myToken = core.getInput('github-token');
+    const octokit = github.getOctokit(myToken);
+
+    const context = github.context;
+
+    if (!context?.issue?.number){
+        console.log("Action doesn't seem to be running in a PR context")
+        console.log("Skipping comment creation")
+        return;
+    }
+
     let message = "";
 
     for (const action in trackedChanges){
@@ -36,10 +47,6 @@ try {
 <details><summary>${summary}</summary>
 ${message}
 </details>`;
-    const myToken = core.getInput('github-token');
-    const octokit = github.getOctokit(myToken);
-
-    const context = github.context;
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
