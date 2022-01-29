@@ -1,14 +1,14 @@
-name: 'Terraform Change PR Commenter'
-description: 'Parse changes from Terraform Plan JSON and post them for PR review'
+name: Terraform Change PR Commenter
+description: Parse changes from Terraform Plan JSON and post them for PR review
 inputs:
-  json-file: # terraform plan output file from terraform show -no-color -json output.plan > tfplan.json
-    description: 'File location for the Terraform Plan JSON file'
+  json-file:
+    description: File location for the Terraform Plan JSON file
     required: false
-    default: 'tfplan.json'
+    default: tfplan.json
   github-token:
-    description: 'GitHub Token'
+    description: GitHub Token
     required: false
-    default: ${{github.token}}
+    default: '${{github.token}}'
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js
