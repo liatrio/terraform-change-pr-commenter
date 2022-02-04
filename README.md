@@ -23,7 +23,7 @@ The location of the JSON file created by running `terraform show -no-color -json
 ## Example usage
 
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@1.0.0
+uses: liatrio/terraform-change-pr-commenter@v1.0.0
 with:
   json-file: 'my-tfplan.json'
 ```
