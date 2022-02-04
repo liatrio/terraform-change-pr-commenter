@@ -1,5 +1,16 @@
-# terraform-change-pr-commenter
-GitHub Action to read changes from Terraform plan JSON, summarize changes, and post them in a GitHub Pull Request Comment
+# Terraform Change Pull Request Commenter Action
+This GitHub Action reads changes from your Terraform plan JSON output, summarizes the changes, and posts them in a single GitHub Pull Request comment.
+
+We recommend using this in your Infrastructure as Code delivery workflow to make any change visible and acclerate the PR review process.
+
+## Features
+
+- Display changes in a Terraform plan without posting larger sections of the plan change log. This approach will, in most cases, avoid the situation where plan contents are too large for a single PR comment. 
+- Collapsed as a summary by default, when expanded, the comment is broken up into sections for  deletion, creation, and resource changes. The changes are also color-coded to help draw attention to each proposed modification.
+- This JavaScript GitHub Action runs directly on a host runner and executes faster than a Docker container Action.
+
+### Example Comment
+![terraform-changes](./assets/terraform-changes.png)
 
 ## Inputs
 
@@ -12,7 +23,7 @@ The location of the JSON file created by running `terraform show -no-color -json
 ## Example usage
 
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@main
+uses: liatrio/terraform-change-pr-commenter@1.0.0
 with:
   json-file: 'my-tfplan.json'
 ```
