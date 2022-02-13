@@ -8,6 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Install Dependencies
+        run: yarn install
+      
       - name: yarn build and semantic-release
         run: yarn run build && npx semantic-release
         env:
