@@ -7,12 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-      - name: npm ci
-        run: npm ci
       
-      - name: npm build and semantic-release
-        run: npm run build && npx semantic-release
+      - name: yarn build and semantic-release
+        run: yarn run build && npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
