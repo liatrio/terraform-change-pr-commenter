@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.0.1...v1.0.2) (2022-02-13)
+
+
+### Bug Fixes
+
+* using yarn build to remove npm dependency vulnerabilities ([3777d7b](https://github.com/liatrio/terraform-change-pr-commenter/commit/3777d7bb2204009d82f659632a95372e71c08dfc))
+
 ## [1.0.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.0.0...v1.0.1) (2022-02-05)
 
 
