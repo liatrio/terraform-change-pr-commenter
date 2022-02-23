@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.0.2...v1.1.0) (2022-02-23)
+
+
+### Features
+
+* Support for multiple plans ([#13](https://github.com/liatrio/terraform-change-pr-commenter/issues/13)) ([9dc08b0](https://github.com/liatrio/terraform-change-pr-commenter/commit/9dc08b01a7f2000f9a8721c4be3479079642580e))
+
 ## [1.0.2](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.0.1...v1.0.2) (2022-02-13)
 
 
