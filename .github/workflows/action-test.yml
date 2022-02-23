@@ -1,0 +1,24 @@
+name: Action Tester Workflow
+
+on:
+  pull_request:
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Git checkout
+          uses: actions/checkout@v2
+
+        - name: Pull Request Comment
+          uses: ./
+          with:
+            json-file: |
+              test-data/tf_test.json
+              test-data/tf_test2.json
+              test-data/tf_test3.json
+
+        - name: Pull Request Comment
+          uses: ./
+          with:
+            json-file: test-data/tf_test.json
