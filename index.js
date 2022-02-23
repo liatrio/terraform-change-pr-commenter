@@ -1,8 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-
-const tfplanJsonFile = core.getInput('json-file');
+const output = require('npm/lib/utils/output');
 
 const trackedChanges = {
     "delete": "-",
@@ -23,8 +22,11 @@ if (context.eventName === 'pull_request') {
     return;
 }
 
-try {
-    const changes = JSON.parse(fs.readFileSync(tfplanJsonFile)).resource_changes;
+const tfplanJsonFile = core.getInput('json-file');
+const filenames = tfplanJsonFile.split(/\n/)
+
+function fileComment(inputFile, showFileName) {
+    const changes = JSON.parse(fs.readFileSync(inputFile)).resource_changes;
 
     let message = "";
 
@@ -45,10 +47,27 @@ try {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    const output = `
+    if(showFileName) {
+        const output = `
+\`${inputFile}\`
+<details><summary>${summary}</summary>
+${message}
+</details>
+`;
+    } else {
+        const output = `
 <details><summary>${summary}</summary>
 ${message}
 </details>`;
+    }
+    
+    return output;
+}
+
+try {
+    let output = "";
+
+    filenames.forEach(file => output += fileComment(file, filenames.length > 1 ? true : false));
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
