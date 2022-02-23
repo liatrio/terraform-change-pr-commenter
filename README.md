@@ -24,12 +24,22 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 
 The location of the JSON file created by running `terraform show -no-color -json tfplan.plan > tfplan.json` (Or whatever you choose to name your plan or json outputs)
 
-## Example usage
+Multiple files can be provided using a text block.
 
+## Example usage
+Single plan file:
 ```yaml
 uses: liatrio/terraform-change-pr-commenter@v1.0.2
 with:
-  json-file: 'my-tfplan.json'
+  json-file: my-tfplan.json
+```
+Multiple plan files:
+```yaml
+uses: liatrio/terraform-change-pr-commenter@v1.0.2
+with:
+  json-file: |
+    core-infra-tfplan.json
+    shared-infra-tfplan.json
 ```
 
 ## Contributing or Submitting Issues
