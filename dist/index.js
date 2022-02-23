@@ -11725,6 +11725,7 @@ function fileComment(inputFile, showFileName) {
 <details><summary>${summary}</summary>
 ${message}
 </details>
+
 `;
 
     return output;
