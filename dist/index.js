@@ -11676,6 +11676,8 @@ const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const fs = __nccwpck_require__(7147);
 
+const tfplanJsonFile = core.getInput('json-file');
+
 const trackedChanges = {
     "delete": "-",
     "create": "+",
@@ -11695,10 +11697,8 @@ if (context.eventName === 'pull_request') {
     return;
 }
 
-const inputFilenames = core.getMultilineInput('json-file');
-
-function fileComment(inputFile, showFileName) {
-    const changes = JSON.parse(fs.readFileSync(inputFile)).resource_changes;
+try {
+    const changes = JSON.parse(fs.readFileSync(tfplanJsonFile)).resource_changes;
 
     let message = "";
 
@@ -11719,22 +11719,10 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    let output = showFileName ? `\`${inputFile}\`` : ""
-
-    output += `
+    const output = `
 <details><summary>${summary}</summary>
 ${message}
-</details>
-
-`;
-
-    return output;
-}
-
-try {
-    let output = "";
-
-    inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1));
+</details>`;
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
@@ -11746,7 +11734,6 @@ try {
 } catch (error) {
     core.setFailed(error.message);
 }
-
 })();
 
 module.exports = __webpack_exports__;
