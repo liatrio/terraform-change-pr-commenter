@@ -23,7 +23,7 @@ if (context.eventName === 'pull_request') {
 }
 
 const tfplanJsonFile = core.getInput('json-file');
-const filenames = tfplanJsonFile.split(/\n/)
+const filenames = tfplanJsonFile.split("\n")
 
 function fileComment(inputFile, showFileName) {
     const changes = JSON.parse(fs.readFileSync(inputFile)).resource_changes;
