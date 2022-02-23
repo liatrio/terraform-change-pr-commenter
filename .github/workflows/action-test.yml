@@ -10,13 +10,13 @@ jobs:
         - name: Git checkout
           uses: actions/checkout@v2
 
-        - name: Pull Request Comment
-          uses: liatrio/terraform-change-pr-commenter@multiple-plans
-          with:
-            json-file: |
-              test-data/tf_test.json
-              test-data/tf_test2.json
-              test-data/tf_test3.json
+#        - name: Pull Request Comment
+#          uses: liatrio/terraform-change-pr-commenter@multiple-plans
+#          with:
+#            json-file: |
+#              test-data/tf_test.json
+#              test-data/tf_test2.json
+#              test-data/tf_test3.json
 
         - name: Pull Request Comment
           uses: ./
