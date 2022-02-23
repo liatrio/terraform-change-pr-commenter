@@ -45,20 +45,13 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    if(showFileName) {
-        const output = `
-\`${inputFile}\`
-<details><summary>${summary}</summary>
-${message}
-</details>
-`;
-    } else {
-        const output = `
+    let output = showFileName ? inputFile : ""
+
+    output += `
 <details><summary>${summary}</summary>
 ${message}
 </details>`;
-    }
-    
+
     return output;
 }
 
