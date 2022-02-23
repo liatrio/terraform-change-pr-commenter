@@ -22,11 +22,7 @@ if (context.eventName === 'pull_request') {
     return;
 }
 
-const tfplanJsonFile = core.getInput('json-file');
-console.log("one:" + tfplanJsonFile);
-
-const filenames = tfplanJsonFile.split("\n")
-console.log("two:" + filenames);
+const inputFilenames = core.getMultilineInput('json-file');
 
 function fileComment(inputFile, showFileName) {
     const changes = JSON.parse(fs.readFileSync(inputFile)).resource_changes;
@@ -70,7 +66,7 @@ ${message}
 try {
     let output = "";
 
-    filenames.forEach(file => output += fileComment(file, filenames.length > 1 ? true : false));
+    inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1 ? true : false));
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
