@@ -1,0 +1,16 @@
+name: Test Pipeline
+
+on:
+  pull_request:
+    
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Git checkout
+          uses: actions/checkout@v2
+
+        - name: Pull Request Comment
+          uses: ./
+          with:
+            json-file: test-data/tf_test.json
