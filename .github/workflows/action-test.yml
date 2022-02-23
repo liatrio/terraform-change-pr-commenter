@@ -1,8 +1,8 @@
-name: Test Pipeline
+name: Action Tester Workflow
 
 on:
   pull_request:
-    
+
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -11,7 +11,7 @@ jobs:
           uses: actions/checkout@v2
 
         - name: Pull Request Comment
-          uses: ./
+          uses: liatrio/terraform-change-pr-commenter@multiple-plans
           with:
             json-file: |
               test-data/tf_test.json
