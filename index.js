@@ -50,7 +50,8 @@ function fileComment(inputFile, showFileName) {
     output += `
 <details><summary>${summary}</summary>
 ${message}
-</details>`;
+</details>
+`;
 
     return output;
 }
