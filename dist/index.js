@@ -11719,7 +11719,7 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    let output = showFileName ? inputFile : ""
+    let output = showFileName ? `\`${inputFile}\`` : ""
 
     output += `
 <details><summary>${summary}</summary>
