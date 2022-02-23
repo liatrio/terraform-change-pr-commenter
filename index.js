@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-const output = require('npm/lib/utils/output');
 
 const trackedChanges = {
     "delete": "-",
