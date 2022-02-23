@@ -11737,18 +11737,16 @@ ${message}
 }
 
 try {
-    // let output = "";
+    let output = "";
 
-    core.info(JSON.stringify(inputFilenames))
-    inputFilenames.forEach(file => core.info(file))
-    // inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1 ? true : false));
+    inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1));
 
-    // octokit.rest.issues.createComment({
-    //     issue_number: context.issue.number,
-    //     owner: context.repo.owner,
-    //     repo: context.repo.repo,
-    //     body: output
-    // });
+    octokit.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: output
+    });
 
 } catch (error) {
     core.setFailed(error.message);
