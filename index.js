@@ -66,7 +66,9 @@ ${message}
 try {
     let output = "";
 
-    inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1 ? true : false));
+    octokit.log.info(JSON.stringify(inputFilenames))
+    inputFilenames.forEach(file => octokit.log.info(file))
+    // inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1 ? true : false));
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
