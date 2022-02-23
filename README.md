@@ -29,13 +29,13 @@ Multiple files can be provided using a text block.
 ## Example usage
 Single plan file:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.0.2
+uses: liatrio/terraform-change-pr-commenter@v1.0.3
 with:
   json-file: my-tfplan.json
 ```
 Multiple plan files:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.0.2
+uses: liatrio/terraform-change-pr-commenter@v1.0.3
 with:
   json-file: |
     core-infra-tfplan.json

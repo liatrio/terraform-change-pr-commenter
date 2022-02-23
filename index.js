@@ -58,9 +58,7 @@ ${message}
 }
 
 try {
-    let output = "";
-
-    inputFilenames.forEach(file => output += fileComment(file, inputFilenames.length > 1));
+    const output = inputFilenames.reduce((str, file) => str + fileComment(file, inputFilenames.length > 1), "");
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
