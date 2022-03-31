@@ -11447,6 +11447,14 @@ module.exports = require("buffer");
 
 /***/ }),
 
+/***/ 2057:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("constants");
+
+/***/ }),
+
 /***/ 2361:
 /***/ ((module) => {
 
@@ -11674,6 +11682,7 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
+const exp = __nccwpck_require__(2057);
 const fs = __nccwpck_require__(7147);
 
 const trackedChanges = {
@@ -11720,7 +11729,10 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    let openDetails = expandDetailsComment ? "open" : ""
+    let openDetails = ""
+    if (expandDetailsComment) {
+        openDetails = "open"
+    }
 
     let output = showFileName ? `\`${inputFile}\`` : ""
 

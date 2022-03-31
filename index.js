@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const exp = require('constants');
 const fs = require('fs');
 
 const trackedChanges = {
@@ -46,7 +47,10 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    let openDetails = expandDetailsComment ? "open" : ""
+    let openDetails = ""
+    if (expandDetailsComment) {
+        openDetails = "open"
+    }
 
     let output = showFileName ? `\`${inputFile}\`` : ""
 
