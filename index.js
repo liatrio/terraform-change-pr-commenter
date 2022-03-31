@@ -9,7 +9,7 @@ const trackedChanges = {
     "update": "!"
 }
 
-const expandDetailsComment = core.getInput('expand-comment');
+const expandDetailsComment = core.getBooleanInput('expand-comment');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
 
