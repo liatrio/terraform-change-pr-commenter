@@ -48,7 +48,7 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
     let openDetails = ""
-    if (expandDetailsComment === false) {
+    if (expandDetailsComment === true) {
         openDetails = "open"
     }
 
