@@ -1,6 +1,5 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const exp = require('constants');
 const fs = require('fs');
 
 const trackedChanges = {
