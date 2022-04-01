@@ -44,8 +44,8 @@
     ]
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Liatrio",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/liatrio/terraform-change-pr-commenter/issues"
   },
