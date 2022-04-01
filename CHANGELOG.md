@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.1.0...v1.2.0) (2022-04-01)
+
+
+### Features
+
+* adding comment block expand flag ([55d2573](https://github.com/liatrio/terraform-change-pr-commenter/commit/55d25736974196a554e7ed4d864224b54af0123d))
+
 # [1.1.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.0.2...v1.1.0) (2022-02-23)
 
 
