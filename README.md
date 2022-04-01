@@ -18,24 +18,31 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 
 ## Inputs
 
+## `expand-comment`
+
+**Optional** Boolean defaults to `false`
+
+- Will expand the changes in comments by default rather than having them collapsed beneath the summary
+
 ### `json-file`
 
 **Optional** Defaults to `tfplan.json`
 
-The location of the JSON file created by running `terraform show -no-color -json tfplan.plan > tfplan.json` (Or whatever you choose to name your plan or json outputs)
+- The location of the JSON file created by running `terraform show -no-color -json tfplan.plan > tfplan.json` (Or whatever you choose to name your plan or json outputs)
 
-Multiple files can be provided using a text block.
+- Multiple files can be provided using a text block.
 
 ## Example usage
 Single plan file:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.1.0
+uses: liatrio/terraform-change-pr-commenter@v1.2.0
 with:
   json-file: my-tfplan.json
+  expand-comment: 'true' 
 ```
 Multiple plan files:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.1.0
+uses: liatrio/terraform-change-pr-commenter@v1.2.0
 with:
   json-file: |
     core-infra-tfplan.json
