@@ -46,11 +46,8 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
-    let openDetails = ""
-    if (expandDetailsComment === true) {
-        openDetails = "open"
-    }
-
+    let openDetails = expandDetailsComment ? "open" : ""
+    
     let output = showFileName ? `\`${inputFile}\`` : ""
 
     output += `
