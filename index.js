@@ -8,6 +8,7 @@ const trackedChanges = {
     "update": "!"
 }
 
+const expandDetailsComment = core.getBooleanInput('expand-comment');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
 
@@ -45,10 +46,12 @@ function fileComment(inputFile, showFileName) {
         changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
         changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
 
+    let openDetails = expandDetailsComment ? "open" : ""
+    
     let output = showFileName ? `\`${inputFile}\`` : ""
 
     output += `
-<details><summary>${summary}</summary>
+<details ${openDetails}><summary>${summary}</summary>
 ${message}
 </details>
 

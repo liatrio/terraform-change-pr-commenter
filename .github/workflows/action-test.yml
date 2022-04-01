@@ -7,18 +7,24 @@ jobs:
   plan:
     runs-on: ubuntu-latest
     steps:
-        - name: Git checkout
-          uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: yarn install
+      - run: yarn run build
 
-        - name: Pull Request Comment
-          uses: ./
-          with:
-            json-file: |
-              test-data/tf_test.json
-              test-data/tf_test2.json
-              test-data/tf_test3.json
+      - name: Pull Request Comment
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+            test-data/tf_test3.json
 
-        - name: Pull Request Comment
-          uses: ./
-          with:
-            json-file: test-data/tf_test.json
+      - name: Pull Request Comment
+        uses: ./
+        with:
+          json-file: test-data/tf_test.json
+          expand-comment: 'true'
+
