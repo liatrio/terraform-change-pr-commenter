@@ -11,4 +11,4 @@ jobs:
       - name: user info print
         run: echo The username is ${{ inputs.username }}
       - name: context url
-        run: echo http://${{ GITHUB_REPOSITORY }}/runs/${{ GITHUB_RUN_ID }}
+        run: echo http://${{ env.GITHUB_REPOSITORY }}/runs/${{ env.GITHUB_RUN_ID }}
