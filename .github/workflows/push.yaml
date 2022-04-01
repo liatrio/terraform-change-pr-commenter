@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: context info print
+      - name: user info print
         run: echo The username is ${{ inputs.username }}
+      - name: context url
         run: echo http://${{ GITHUB_REPOSITORY }}/runs/${{ GITHUB_RUN_ID }}
