@@ -54,6 +54,7 @@ function fileComment(inputFile, showFileName) {
 <details ${openDetails}><summary>${summary}</summary>
 ${message}
 </details>
+
 `;
 
     return output;
