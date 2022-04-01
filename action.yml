@@ -12,6 +12,10 @@ inputs:
     description: GitHub Token
     required: false
     default: '${{github.token}}'
+  expand-comment:
+    description: If true, expand the details comment by default
+    required: false
+    default: 'false'
 runs:
   using: node16
   main: dist/index.js
