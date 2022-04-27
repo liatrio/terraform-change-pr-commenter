@@ -2,74 +2,89 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
 
-const trackedChanges = {
-    "delete": "-",
-    "create": "+",
-    "update": "!"
-}
-
 const expandDetailsComment = core.getBooleanInput('expand-comment');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
-
 const context = github.context;
-
-if (context.eventName === 'pull_request') {
-    core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
-} else {
-    core.warning("Action doesn't seem to be running in a PR workflow context.")
-    core.warning("Skipping comment creation.")
-    return;
-}
-
 const inputFilenames = core.getMultilineInput('json-file');
 
-function fileComment(inputFile, showFileName) {
-    const changes = JSON.parse(fs.readFileSync(inputFile)).resource_changes;
+const output = () => {
+    let body = "";
+    // for each file
+    for(const file of inputFilenames) {
+        const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes;
+        const resources_to_create   = []
+            , resources_to_update   = []
+            , resources_to_delete   = []
+            , resources_to_replace  = []
+            , resources_unchanged   = [];
 
-    let message = "";
-
-    for (const action in trackedChanges) {
-        if (changes.filter(obj => obj.change.actions.includes(action)).length === 0) {
-            continue
+        // for each resource changes
+        for(const resource of resource_changes) {
+            const change = resource.change;
+            const address = resource.address;
+            
+            switch(change.actions[0]) {
+                default:
+                    break;
+                case "no-op":
+                    resources_unchanged.push(address);
+                    break;
+                case "create":
+                    resources_to_create.push(address);
+                    break;
+                case "delete":
+                    if(change.actions.length > 1) {
+                        resources_to_replace.push(address);
+                    } else {
+                        resources_to_delete.push(address);
+                    }
+                    break;
+                case "update":
+                    resources_to_update.push(address);
+                    break;
+            }
         }
-        message += `\n#### Resources to ${action}: \n\n`
-        message += '```diff\n'
-        for (const change of changes.filter(obj => obj.change.actions.includes(action))) {
-            message += `${trackedChanges[change.change.actions[0]]} ${change.address}\n`
-        }
-        message += '```\n\n'
-    }
 
-    const summary = '<b>Terraform Plan: ' +
-        changes.filter(obj => obj.change.actions[0] === "create").length + ' to add, ' +
-        changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
-        changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
-
-    let openDetails = expandDetailsComment ? "open" : ""
-    
-    let output = showFileName ? `\`${inputFile}\`` : ""
-
-    output += `
-<details ${openDetails}><summary>${summary}</summary>
-${message}
+        body += `
+\`${file}\`
+<details ${expandDetailsComment ? "open" : ""}>
+    <summary>
+        <b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
+    </summary>
+${details("create", resources_to_create, "+")}
+${details("delete", resources_to_delete, "-")}
+${details("update", resources_to_update, "!")}
+${details("replace", resources_to_replace, "+")}
 </details>
+`
+    }
+    return body;
+}
 
+const details = (action, resources, operator) => {
+    let str = `
+#### Resources to ${action}\n
+\`\`\`diff\n
 `;
-
-    return output;
+    for(const el of resources) {
+        // In the replace block, we show delete (-) and then create (+)
+        if(action === "replace") {
+            str += `- ${el}\n`
+        }
+        str += `${operator} ${el}\n`
+    }
+    
+    return str += "```\n";
 }
 
 try {
-    const output = inputFilenames.reduce((str, file) => str + fileComment(file, inputFilenames.length > 1), "");
-
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
         owner: context.repo.owner,
         repo: context.repo.repo,
-        body: output
+        body: output()
     });
-
 } catch (error) {
     core.setFailed(error.message);
 }
