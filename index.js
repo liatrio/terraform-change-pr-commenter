@@ -3,9 +3,10 @@ const github = require('@actions/github');
 const fs = require('fs');
 
 const trackedChanges = {
-    "delete": "-",
-    "create": "+",
-    "update": "!"
+    "delete":   "-",
+    "create":   "+",
+    "update":   "!",
+    "replace":  "-/+"
 }
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
@@ -30,6 +31,9 @@ function fileComment(inputFile, showFileName) {
     let message = "";
 
     for (const action in trackedChanges) {
+        core.info("CHANGES:", changes);
+        core.info("ACTIONL:", action);
+        
         if (changes.filter(obj => obj.change.actions.includes(action)).length === 0) {
             continue
         }
