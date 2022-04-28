@@ -44,7 +44,7 @@ function fileComment(inputFile, showFileName) {
     const summary = '<b>Terraform Plan: ' +
         changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "create").length + ' to add, ' +
         changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "update").length + ' to change, ' +
-        changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "delete").length + ' to destroy,'
+        changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "delete").length + ' to destroy,' +
         changes.filter(obj => (obj.change.actions.length == 2 && obj.change.actions[0]) === "delete" && obj.change.actions[1] === "create").length + ' to replaced.</b>'
 
     let openDetails = expandDetailsComment ? "open" : ""
