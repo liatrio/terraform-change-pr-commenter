@@ -5,8 +5,7 @@ const fs = require('fs');
 const trackedChanges = {
     "delete":   "-",
     "create":   "+",
-    "update":   "!",
-    "replace":  "-/+"
+    "update":   "!"
 }
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
@@ -20,7 +19,7 @@ if (context.eventName === 'pull_request') {
 } else {
     core.warning("Action doesn't seem to be running in a PR workflow context.")
     core.warning("Skipping comment creation.")
-    return;
+    process.exit(0)
 }
 
 const inputFilenames = core.getMultilineInput('json-file');
@@ -31,9 +30,6 @@ function fileComment(inputFile, showFileName) {
     let message = "";
 
     for (const action in trackedChanges) {
-        core.info("CHANGES:", changes);
-        core.info("ACTIONL:", action);
-        
         if (changes.filter(obj => obj.change.actions.includes(action)).length === 0) {
             continue
         }
@@ -44,14 +40,14 @@ function fileComment(inputFile, showFileName) {
         }
         message += '```\n\n'
     }
-
+    
     const summary = '<b>Terraform Plan: ' +
-        changes.filter(obj => obj.change.actions[0] === "create").length + ' to add, ' +
-        changes.filter(obj => obj.change.actions[0] === "update").length + ' to change, ' +
-        changes.filter(obj => obj.change.actions[0] === "delete").length + ' to destroy.</b>'
+        changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "create").length + ' to add, ' +
+        changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "update").length + ' to change, ' +
+        changes.filter(obj => (obj.change.actions.length == 1 && obj.change.actions[0]) === "delete").length + ' to destroy,'
+        changes.filter(obj => (obj.change.actions.length == 2 && obj.change.actions[0]) === "delete" && obj.change.actions[1] === "create").length + ' to replaced.</b>'
 
     let openDetails = expandDetailsComment ? "open" : ""
-    
     let output = showFileName ? `\`${inputFile}\`` : ""
 
     output += `

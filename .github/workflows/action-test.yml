@@ -21,6 +21,7 @@ jobs:
             test-data/tf_test.json
             test-data/tf_test2.json
             test-data/tf_test3.json
+            test-data/tf_test4.json
 
       - name: Pull Request Comment
         uses: ./
