@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.0...v1.3.1) (2022-04-29)
+
+
+### Bug Fixes
+
+* operator for replace was broken in last fixes ([#25](https://github.com/liatrio/terraform-change-pr-commenter/issues/25)) ([e82bf94](https://github.com/liatrio/terraform-change-pr-commenter/commit/e82bf94e915ad440bd0c08e69dcd9ef748a74ed2))
+
 # [1.3.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.2.0...v1.3.0) (2022-04-29)
 
 
