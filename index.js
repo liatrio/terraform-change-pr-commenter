@@ -55,7 +55,7 @@ const output = () => {
 ${details("create", resources_to_create, "+")}
 ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
-${details("replace", resources_to_replace, "-/+")}
+${details("replace", resources_to_replace, "+")}
 </details>
 `
     }
