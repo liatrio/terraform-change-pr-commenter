@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.2.0...v1.3.0) (2022-04-29)
+
+
+### Features
+
+* added support for 'replace', and 'unchanged' ([#24](https://github.com/liatrio/terraform-change-pr-commenter/issues/24)) ([a3c45b0](https://github.com/liatrio/terraform-change-pr-commenter/commit/a3c45b0c735a3c4467729d0f94730c2af583a5e2))
+
 # [1.2.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.1.0...v1.2.0) (2022-04-01)
 
 
