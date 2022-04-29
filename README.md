@@ -35,14 +35,14 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 ## Example usage
 Single plan file:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.2.0
+uses: liatrio/terraform-change-pr-commenter@v1.3.1
 with:
   json-file: my-tfplan.json
   expand-comment: 'true' 
 ```
 Multiple plan files:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.2.0
+uses: liatrio/terraform-change-pr-commenter@v1.3.1
 with:
   json-file: |
     core-infra-tfplan.json
