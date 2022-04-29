@@ -534,7 +534,7 @@
             "provider_name": "registry.terraform.io/hashicorp/azurerm",
             "change": {
                 "actions": [
-                    "create"
+                    "delete"
                 ],
                 "before": null,
                 "after": {
@@ -596,7 +596,7 @@
             "provider_name": "registry.terraform.io/hashicorp/azurerm",
             "change": {
                 "actions": [
-                    "create"
+                    "update"
                 ],
                 "before": null,
                 "after": {

@@ -55,7 +55,7 @@ const output = () => {
 ${details("create", resources_to_create, "+")}
 ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
-${details("replace", resources_to_replace, "+")}
+${details("replace", resources_to_replace, "-/+")}
 </details>
 `
     }
@@ -63,22 +63,36 @@ ${details("replace", resources_to_replace, "+")}
 }
 
 const details = (action, resources, operator) => {
-    let str = `
+    let str = "";
+    
+    if(resources.length !== 0) {
+        str = `
 #### Resources to ${action}\n
 \`\`\`diff\n
 `;
-    for(const el of resources) {
-        // In the replace block, we show delete (-) and then create (+)
-        if(action === "replace") {
-            str += `- ${el}\n`
+        for(const el of resources) {
+            // In the replace block, we show delete (-) and then create (+)
+            if(action === "replace") {
+                str += `- ${el}\n`
+            }
+            str += `${operator} ${el}\n`
         }
-        str += `${operator} ${el}\n`
+
+        str += "```\n"
     }
     
-    return str += "```\n";
+    return str;
 }
 
 try {
+    if (context.eventName === 'pull_request') {
+        core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+    } else {
+        core.warning("Action doesn't seem to be running in a PR workflow context.")
+        core.warning("Skipping comment creation.")
+        process.exit(0);
+    }
+
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
         owner: context.repo.owner,
