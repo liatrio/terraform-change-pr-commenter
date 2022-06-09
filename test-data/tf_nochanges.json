@@ -1,0 +1,831 @@
+{
+    "format_version": "1.0",
+    "terraform_version": "1.1.5",
+    "planned_values": {
+        "outputs": {
+            "tls_private_key": {
+                "sensitive": true
+            }
+        },
+        "root_module": {
+            "resources": [
+                {
+                    "address": "azurerm_linux_virtual_machine.calvinvm",
+                    "mode": "managed",
+                    "type": "azurerm_linux_virtual_machine",
+                    "name": "calvinvm",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "additional_capabilities": [],
+                        "admin_password": null,
+                        "admin_ssh_key": [
+                            {
+                                "username": "azureuser"
+                            }
+                        ],
+                        "admin_username": "azureuser",
+                        "allow_extension_operations": true,
+                        "availability_set_id": null,
+                        "boot_diagnostics": [
+                            {}
+                        ],
+                        "computer_name": "calvintestvm",
+                        "custom_data": null,
+                        "dedicated_host_group_id": null,
+                        "dedicated_host_id": null,
+                        "disable_password_authentication": true,
+                        "encryption_at_host_enabled": null,
+                        "eviction_policy": null,
+                        "extensions_time_budget": "PT1H30M",
+                        "identity": [],
+                        "license_type": null,
+                        "location": "centralus",
+                        "max_bid_price": -1,
+                        "name": "calvinVM",
+                        "os_disk": [
+                            {
+                                "caching": "ReadWrite",
+                                "diff_disk_settings": [],
+                                "disk_encryption_set_id": null,
+                                "name": "calvinOsDisk",
+                                "storage_account_type": "Standard_LRS",
+                                "write_accelerator_enabled": false
+                            }
+                        ],
+                        "patch_mode": "ImageDefault",
+                        "plan": [],
+                        "platform_fault_domain": -1,
+                        "priority": "Regular",
+                        "provision_vm_agent": true,
+                        "proximity_placement_group_id": null,
+                        "resource_group_name": "calvin-experimenting",
+                        "secret": [],
+                        "secure_boot_enabled": null,
+                        "size": "Standard_DS1_v2",
+                        "source_image_id": null,
+                        "source_image_reference": [
+                            {
+                                "offer": "UbuntuServer",
+                                "publisher": "Canonical",
+                                "sku": "18.04-LTS",
+                                "version": "latest"
+                            }
+                        ],
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null,
+                        "user_data": null,
+                        "virtual_machine_scale_set_id": null,
+                        "vtpm_enabled": null
+                    },
+                    "sensitive_values": {
+                        "additional_capabilities": [],
+                        "admin_ssh_key": [
+                            {}
+                        ],
+                        "boot_diagnostics": [
+                            {}
+                        ],
+                        "identity": [],
+                        "network_interface_ids": [],
+                        "os_disk": [
+                            {
+                                "diff_disk_settings": []
+                            }
+                        ],
+                        "plan": [],
+                        "private_ip_addresses": [],
+                        "public_ip_addresses": [],
+                        "secret": [],
+                        "source_image_reference": [
+                            {}
+                        ],
+                        "tags": {}
+                    }
+                },
+                {
+                    "address": "azurerm_network_interface.calvin-nic",
+                    "mode": "managed",
+                    "type": "azurerm_network_interface",
+                    "name": "calvin-nic",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "enable_accelerated_networking": false,
+                        "enable_ip_forwarding": false,
+                        "ip_configuration": [
+                            {
+                                "name": "calvinNicConfiguration",
+                                "private_ip_address_allocation": "dynamic",
+                                "private_ip_address_version": "IPv4"
+                            }
+                        ],
+                        "location": "centralus",
+                        "name": "calvinNICtest",
+                        "resource_group_name": "calvin-experimenting",
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null
+                    },
+                    "sensitive_values": {
+                        "applied_dns_servers": [],
+                        "dns_servers": [],
+                        "ip_configuration": [
+                            {}
+                        ],
+                        "private_ip_addresses": [],
+                        "tags": {}
+                    }
+                },
+                {
+                    "address": "azurerm_network_interface_security_group_association.calvin-sg-nic",
+                    "mode": "managed",
+                    "type": "azurerm_network_interface_security_group_association",
+                    "name": "calvin-sg-nic",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "timeouts": null
+                    },
+                    "sensitive_values": {}
+                },
+                {
+                    "address": "azurerm_network_security_group.calvin-security-group",
+                    "mode": "managed",
+                    "type": "azurerm_network_security_group",
+                    "name": "calvin-security-group",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "location": "centralus",
+                        "name": "calvinsg",
+                        "resource_group_name": "calvin-experimenting",
+                        "security_rule": [
+                            {
+                                "access": "Allow",
+                                "description": "",
+                                "destination_address_prefix": "*",
+                                "destination_address_prefixes": [],
+                                "destination_application_security_group_ids": [],
+                                "destination_port_range": "22",
+                                "destination_port_ranges": [],
+                                "direction": "Inbound",
+                                "name": "SSH",
+                                "priority": 1001,
+                                "protocol": "Tcp",
+                                "source_address_prefix": "*",
+                                "source_address_prefixes": [],
+                                "source_application_security_group_ids": [],
+                                "source_port_range": "*",
+                                "source_port_ranges": []
+                            }
+                        ],
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null
+                    },
+                    "sensitive_values": {
+                        "security_rule": [
+                            {
+                                "destination_address_prefixes": [],
+                                "destination_application_security_group_ids": [],
+                                "destination_port_ranges": [],
+                                "source_address_prefixes": [],
+                                "source_application_security_group_ids": [],
+                                "source_port_ranges": []
+                            }
+                        ],
+                        "tags": {}
+                    }
+                },
+                {
+                    "address": "azurerm_public_ip.calvin-ip",
+                    "mode": "managed",
+                    "type": "azurerm_public_ip",
+                    "name": "calvin-ip",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "allocation_method": "Dynamic",
+                        "domain_name_label": null,
+                        "idle_timeout_in_minutes": 4,
+                        "ip_tags": null,
+                        "ip_version": "IPv4",
+                        "location": "centralus",
+                        "name": "calvinpublicip",
+                        "public_ip_prefix_id": null,
+                        "resource_group_name": "calvin-experimenting",
+                        "reverse_fqdn": null,
+                        "sku": "Basic",
+                        "sku_tier": "Regional",
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null
+                    },
+                    "sensitive_values": {
+                        "tags": {},
+                        "zones": []
+                    }
+                },
+                {
+                    "address": "azurerm_resource_group.calvin",
+                    "mode": "managed",
+                    "type": "azurerm_resource_group",
+                    "name": "calvin",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "location": "centralus",
+                        "name": "calvin-experimenting",
+                        "tags": null,
+                        "timeouts": null
+                    },
+                    "sensitive_values": {}
+                },
+                {
+                    "address": "azurerm_storage_account.calvin-sa",
+                    "mode": "managed",
+                    "type": "azurerm_storage_account",
+                    "name": "calvin-sa",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 2,
+                    "values": {
+                        "account_kind": "StorageV2",
+                        "account_replication_type": "LRS",
+                        "account_tier": "Standard",
+                        "allow_blob_public_access": false,
+                        "azure_files_authentication": [],
+                        "custom_domain": [],
+                        "enable_https_traffic_only": true,
+                        "identity": [],
+                        "infrastructure_encryption_enabled": false,
+                        "is_hns_enabled": false,
+                        "location": "centralus",
+                        "min_tls_version": "TLS1_0",
+                        "nfsv3_enabled": false,
+                        "queue_encryption_key_type": "Service",
+                        "resource_group_name": "calvin-experimenting",
+                        "shared_access_key_enabled": true,
+                        "static_website": [],
+                        "table_encryption_key_type": "Service",
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null
+                    },
+                    "sensitive_values": {
+                        "azure_files_authentication": [],
+                        "blob_properties": [],
+                        "custom_domain": [],
+                        "identity": [],
+                        "network_rules": [],
+                        "queue_properties": [],
+                        "routing": [],
+                        "share_properties": [],
+                        "static_website": [],
+                        "tags": {}
+                    }
+                },
+                {
+                    "address": "azurerm_subnet.calvin-subnet",
+                    "mode": "managed",
+                    "type": "azurerm_subnet",
+                    "name": "calvin-subnet",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "address_prefixes": [
+                            "10.0.1.0/24"
+                        ],
+                        "delegation": [],
+                        "enforce_private_link_endpoint_network_policies": false,
+                        "enforce_private_link_service_network_policies": false,
+                        "name": "calvinsubnettest",
+                        "resource_group_name": "calvin-experimenting",
+                        "service_endpoint_policy_ids": null,
+                        "service_endpoints": null,
+                        "timeouts": null,
+                        "virtual_network_name": "calvinvnettest"
+                    },
+                    "sensitive_values": {
+                        "address_prefixes": [
+                            false
+                        ],
+                        "delegation": []
+                    }
+                },
+                {
+                    "address": "azurerm_virtual_network.calvin-vn",
+                    "mode": "managed",
+                    "type": "azurerm_virtual_network",
+                    "name": "calvin-vn",
+                    "provider_name": "registry.terraform.io/hashicorp/azurerm",
+                    "schema_version": 0,
+                    "values": {
+                        "address_space": [
+                            "10.0.0.0/16"
+                        ],
+                        "bgp_community": null,
+                        "ddos_protection_plan": [],
+                        "flow_timeout_in_minutes": null,
+                        "location": "centralus",
+                        "name": "calvinvnettest",
+                        "resource_group_name": "calvin-experimenting",
+                        "tags": {
+                            "project": "calvin-experimenting"
+                        },
+                        "timeouts": null,
+                        "vm_protection_enabled": false
+                    },
+                    "sensitive_values": {
+                        "address_space": [
+                            false
+                        ],
+                        "ddos_protection_plan": [],
+                        "dns_servers": [],
+                        "subnet": [],
+                        "tags": {}
+                    }
+                },
+                {
+                    "address": "random_id.calvin-rid",
+                    "mode": "managed",
+                    "type": "random_id",
+                    "name": "calvin-rid",
+                    "provider_name": "registry.terraform.io/hashicorp/random",
+                    "schema_version": 0,
+                    "values": {
+                        "byte_length": 8,
+                        "keepers": {
+                            "resource_group": "calvin-experimenting"
+                        },
+                        "prefix": null
+                    },
+                    "sensitive_values": {
+                        "keepers": {}
+                    }
+                },
+                {
+                    "address": "tls_private_key.calvin_ssh",
+                    "mode": "managed",
+                    "type": "tls_private_key",
+                    "name": "calvin_ssh",
+                    "provider_name": "registry.terraform.io/hashicorp/tls",
+                    "schema_version": 0,
+                    "values": {
+                        "algorithm": "RSA",
+                        "ecdsa_curve": "P224",
+                        "rsa_bits": 4096
+                    },
+                    "sensitive_values": {}
+                }
+            ]
+        }
+    },
+    "resource_changes": [],
+    "output_changes": {},
+    "configuration": {
+        "provider_config": {
+            "azurerm": {
+                "name": "azurerm",
+                "version_constraint": "2.95.0",
+                "expressions": {
+                    "features": [
+                        {}
+                    ]
+                }
+            }
+        },
+        "root_module": {
+            "outputs": {
+                "tls_private_key": {
+                    "sensitive": true,
+                    "expression": {
+                        "references": [
+                            "tls_private_key.calvin_ssh.private_key_pem",
+                            "tls_private_key.calvin_ssh"
+                        ]
+                    }
+                }
+            },
+            "resources": [
+                {
+                    "address": "azurerm_linux_virtual_machine.calvinvm",
+                    "mode": "managed",
+                    "type": "azurerm_linux_virtual_machine",
+                    "name": "calvinvm",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "admin_ssh_key": [
+                            {
+                                "public_key": {
+                                    "references": [
+                                        "tls_private_key.calvin_ssh.public_key_openssh",
+                                        "tls_private_key.calvin_ssh"
+                                    ]
+                                },
+                                "username": {
+                                    "constant_value": "azureuser"
+                                }
+                            }
+                        ],
+                        "admin_username": {
+                            "constant_value": "azureuser"
+                        },
+                        "boot_diagnostics": [
+                            {
+                                "storage_account_uri": {
+                                    "references": [
+                                        "azurerm_storage_account.calvin-sa.primary_blob_endpoint",
+                                        "azurerm_storage_account.calvin-sa"
+                                    ]
+                                }
+                            }
+                        ],
+                        "computer_name": {
+                            "constant_value": "calvintestvm"
+                        },
+                        "disable_password_authentication": {
+                            "constant_value": true
+                        },
+                        "location": {
+                            "references": [
+                                "azurerm_resource_group.calvin.location",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "name": {
+                            "constant_value": "calvinVM"
+                        },
+                        "network_interface_ids": {
+                            "references": [
+                                "azurerm_network_interface.calvin-nic.id",
+                                "azurerm_network_interface.calvin-nic"
+                            ]
+                        },
+                        "os_disk": [
+                            {
+                                "caching": {
+                                    "constant_value": "ReadWrite"
+                                },
+                                "name": {
+                                    "constant_value": "calvinOsDisk"
+                                },
+                                "storage_account_type": {
+                                    "constant_value": "Standard_LRS"
+                                }
+                            }
+                        ],
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "size": {
+                            "constant_value": "Standard_DS1_v2"
+                        },
+                        "source_image_reference": [
+                            {
+                                "offer": {
+                                    "constant_value": "UbuntuServer"
+                                },
+                                "publisher": {
+                                    "constant_value": "Canonical"
+                                },
+                                "sku": {
+                                    "constant_value": "18.04-LTS"
+                                },
+                                "version": {
+                                    "constant_value": "latest"
+                                }
+                            }
+                        ],
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_network_interface.calvin-nic",
+                    "mode": "managed",
+                    "type": "azurerm_network_interface",
+                    "name": "calvin-nic",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "ip_configuration": [
+                            {
+                                "name": {
+                                    "constant_value": "calvinNicConfiguration"
+                                },
+                                "private_ip_address_allocation": {
+                                    "constant_value": "Dynamic"
+                                },
+                                "public_ip_address_id": {
+                                    "references": [
+                                        "azurerm_public_ip.calvin-ip.id",
+                                        "azurerm_public_ip.calvin-ip"
+                                    ]
+                                },
+                                "subnet_id": {
+                                    "references": [
+                                        "azurerm_subnet.calvin-subnet.id",
+                                        "azurerm_subnet.calvin-subnet"
+                                    ]
+                                }
+                            }
+                        ],
+                        "location": {
+                            "references": [
+                                "azurerm_resource_group.calvin.location",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "name": {
+                            "constant_value": "calvinNICtest"
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_network_interface_security_group_association.calvin-sg-nic",
+                    "mode": "managed",
+                    "type": "azurerm_network_interface_security_group_association",
+                    "name": "calvin-sg-nic",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "network_interface_id": {
+                            "references": [
+                                "azurerm_network_interface.calvin-nic.id",
+                                "azurerm_network_interface.calvin-nic"
+                            ]
+                        },
+                        "network_security_group_id": {
+                            "references": [
+                                "azurerm_network_security_group.calvin-security-group.id",
+                                "azurerm_network_security_group.calvin-security-group"
+                            ]
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_network_security_group.calvin-security-group",
+                    "mode": "managed",
+                    "type": "azurerm_network_security_group",
+                    "name": "calvin-security-group",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "location": {
+                            "references": [
+                                "azurerm_resource_group.calvin.location",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "name": {
+                            "constant_value": "calvinsg"
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "security_rule": {
+                            "constant_value": [
+                                {
+                                    "access": "Allow",
+                                    "description": null,
+                                    "destination_address_prefix": "*",
+                                    "destination_address_prefixes": null,
+                                    "destination_application_security_group_ids": null,
+                                    "destination_port_range": "22",
+                                    "destination_port_ranges": null,
+                                    "direction": "Inbound",
+                                    "name": "SSH",
+                                    "priority": 1001,
+                                    "protocol": "Tcp",
+                                    "source_address_prefix": "*",
+                                    "source_address_prefixes": null,
+                                    "source_application_security_group_ids": null,
+                                    "source_port_range": "*",
+                                    "source_port_ranges": null
+                                }
+                            ]
+                        },
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_public_ip.calvin-ip",
+                    "mode": "managed",
+                    "type": "azurerm_public_ip",
+                    "name": "calvin-ip",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "allocation_method": {
+                            "constant_value": "Dynamic"
+                        },
+                        "location": {
+                            "references": [
+                                "azurerm_resource_group.calvin.location",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "name": {
+                            "constant_value": "calvinpublicip"
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_resource_group.calvin",
+                    "mode": "managed",
+                    "type": "azurerm_resource_group",
+                    "name": "calvin",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "location": {
+                            "constant_value": "Central US"
+                        },
+                        "name": {
+                            "constant_value": "calvin-experimenting"
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_storage_account.calvin-sa",
+                    "mode": "managed",
+                    "type": "azurerm_storage_account",
+                    "name": "calvin-sa",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "account_replication_type": {
+                            "constant_value": "LRS"
+                        },
+                        "account_tier": {
+                            "constant_value": "Standard"
+                        },
+                        "location": {
+                            "references": [
+                                "azurerm_resource_group.calvin.location",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "name": {
+                            "references": [
+                                "random_id.calvin-rid.hex",
+                                "random_id.calvin-rid"
+                            ]
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 2
+                },
+                {
+                    "address": "azurerm_subnet.calvin-subnet",
+                    "mode": "managed",
+                    "type": "azurerm_subnet",
+                    "name": "calvin-subnet",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "address_prefixes": {
+                            "constant_value": [
+                                "10.0.1.0/24"
+                            ]
+                        },
+                        "name": {
+                            "constant_value": "calvinsubnettest"
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "virtual_network_name": {
+                            "references": [
+                                "azurerm_virtual_network.calvin-vn.name",
+                                "azurerm_virtual_network.calvin-vn"
+                            ]
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "azurerm_virtual_network.calvin-vn",
+                    "mode": "managed",
+                    "type": "azurerm_virtual_network",
+                    "name": "calvin-vn",
+                    "provider_config_key": "azurerm",
+                    "expressions": {
+                        "address_space": {
+                            "constant_value": [
+                                "10.0.0.0/16"
+                            ]
+                        },
+                        "location": {
+                            "constant_value": "Central US"
+                        },
+                        "name": {
+                            "constant_value": "calvinvnettest"
+                        },
+                        "resource_group_name": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        },
+                        "tags": {
+                            "constant_value": {
+                                "project": "calvin-experimenting"
+                            }
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "random_id.calvin-rid",
+                    "mode": "managed",
+                    "type": "random_id",
+                    "name": "calvin-rid",
+                    "provider_config_key": "random",
+                    "expressions": {
+                        "byte_length": {
+                            "constant_value": 8
+                        },
+                        "keepers": {
+                            "references": [
+                                "azurerm_resource_group.calvin.name",
+                                "azurerm_resource_group.calvin"
+                            ]
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "tls_private_key.calvin_ssh",
+                    "mode": "managed",
+                    "type": "tls_private_key",
+                    "name": "calvin_ssh",
+                    "provider_config_key": "tls",
+                    "expressions": {
+                        "algorithm": {
+                            "constant_value": "RSA"
+                        },
+                        "rsa_bits": {
+                            "constant_value": 4096
+                        }
+                    },
+                    "schema_version": 0
+                }
+            ]
+        }
+    }
+}

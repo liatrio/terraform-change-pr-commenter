@@ -21,10 +21,14 @@ jobs:
             test-data/tf_test.json
             test-data/tf_test2.json
             test-data/tf_test3.json
-            test-data/tf_empty.json
 
       - name: Test PR Comment Expand feature
         uses: ./
         with:
           json-file: test-data/tf_test.json
           expand-comment: 'true'
+
+      - name: Test PR Commenter with no changes
+        uses: ./
+        with: 
+          json-file: test-data/tf_nochanges.json
