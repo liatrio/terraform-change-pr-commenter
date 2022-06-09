@@ -51,17 +51,17 @@ const output = () => {
                 // there will be formatting error when comment is 
                 // showed on GitHub
                 body += `
-    \`${file}\`
-    <details ${expandDetailsComment ? "open" : ""}>
-        <summary>
-            <b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
-        </summary>
-    ${details("create", resources_to_create, "+")}
-    ${details("delete", resources_to_delete, "-")}
-    ${details("update", resources_to_update, "!")}
-    ${details("replace", resources_to_replace, "+")}
-    </details>
-    `
+\`${file}\`
+<details ${expandDetailsComment ? "open" : ""}>
+  <summary>
+    <b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
+  </summary>
+${details("create", resources_to_create, "+")}
+${details("delete", resources_to_delete, "-")}
+${details("update", resources_to_update, "!")}
+${details("replace", resources_to_replace, "+")}
+</details>
+`
             } else {
                 core.info(`"The content of ${file} did not result in a valid array or the array is empty... Skipping."`)
             }
@@ -109,7 +109,7 @@ try {
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: output()
+            body: commentBody
         });
     } else {
         core.info("There were no changes done to the infrastructure.")
