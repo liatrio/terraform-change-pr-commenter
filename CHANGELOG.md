@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.1...v1.3.2) (2022-06-09)
+
+
+### Bug Fixes
+
+* [#30](https://github.com/liatrio/terraform-change-pr-commenter/issues/30) empty plan would failed the action ([#31](https://github.com/liatrio/terraform-change-pr-commenter/issues/31)) ([c4ea052](https://github.com/liatrio/terraform-change-pr-commenter/commit/c4ea0520ce5c086465dda4da3f75fca6527a60e0))
+
 ## [1.3.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.0...v1.3.1) (2022-04-29)
 
 
