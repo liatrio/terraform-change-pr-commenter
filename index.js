@@ -9,7 +9,7 @@ const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 
 const output = () => {
-    let body = "";
+    let body = '';
     // for each file
     for(const file of inputFilenames) {
         const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes;
@@ -63,6 +63,10 @@ ${details("replace", resources_to_replace, "+")}
 </details>
 `
             } else {
+                body += `
+\`${file}\`
+<p>There were no changes done to the infrastructure.</p>
+`
                 core.info(`"The content of ${file} did not result in a valid array or the array is empty... Skipping."`)
             }
         } catch (error) {
@@ -103,12 +107,11 @@ try {
         process.exit(0);
     }
 
-    const commentBody = output();
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
         owner: context.repo.owner,
         repo: context.repo.repo,
-        body: (commentBody !== "") ? commentBody : "There were no changes done to the infrastructure."
+        body: output()
     });
 } catch (error) {
     core.setFailed(error.message);
