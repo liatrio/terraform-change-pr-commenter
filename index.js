@@ -103,12 +103,17 @@ try {
         process.exit(0);
     }
 
-    octokit.rest.issues.createComment({
-        issue_number: context.issue.number,
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        body: output()
-    });
+    const commentBody = output();
+    if(commentBody !== "") {
+        octokit.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output()
+        });
+    } else {
+        core.info("There were no changes done to the infrastructure.")
+    }
 } catch (error) {
     core.setFailed(error.message);
 }
