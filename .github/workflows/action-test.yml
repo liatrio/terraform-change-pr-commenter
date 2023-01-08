@@ -27,6 +27,7 @@ jobs:
         with:
           json-file: test-data/tf_test.json
           expand-comment: 'true'
+          include-plan-job-summary: 'true'
 
       - name: Test PR Commenter with no changes
         uses: ./

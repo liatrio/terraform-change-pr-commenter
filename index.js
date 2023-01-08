@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const fs = require('fs');
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
+const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
 const context = github.context;
@@ -99,6 +100,11 @@ const details = (action, resources, operator) => {
 }
 
 try {
+    if (includePlanSummary) {
+        core.info("Adding plan output to job summary")
+        core.summary.addHeading('Terraform Plan Results').addRaw(output()).write()
+    }
+
     if (context.eventName === 'pull_request') {
         core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
     } else {
@@ -113,8 +119,6 @@ try {
         repo: context.repo.repo,
         body: output()
     });
-
-  core.summary.addHeading('Terraform Plan Results').addRaw(output()).write()
 
 } catch (error) {
     core.setFailed(error.message);

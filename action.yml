@@ -16,6 +16,10 @@ inputs:
     description: If true, expand the details comment by default
     required: false
     default: 'false'
+  include-plan-job-summary:
+    description: If true, add the results of the plan to the workflow job summary
+    required: false
+    default: 'false'
 runs:
   using: node16
   main: dist/index.js
