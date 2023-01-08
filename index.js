@@ -114,10 +114,7 @@ try {
         body: output()
     });
 
-    await core.summary
-    .addHeading('Terraform Plan Results')
-    .addRaw(output())
-    .write()
+  core.summary.addHeading('Terraform Plan Results').addRaw(output()).write()
 
 } catch (error) {
     core.setFailed(error.message);
