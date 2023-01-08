@@ -113,6 +113,12 @@ try {
         repo: context.repo.repo,
         body: output()
     });
+
+    await core.summary
+    .addHeading('Terraform Plan Results')
+    .addRaw(output())
+    .write()
+
 } catch (error) {
     core.setFailed(error.message);
 }
