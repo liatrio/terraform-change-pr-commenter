@@ -49,6 +49,18 @@ with:
     shared-infra-tfplan.json
 ```
 
+## Terraform Configuration / Known Issues
+#### Known issue when including the [Terraform Wrapper script](https://github.com/hashicorp/setup-terraform#inputs)
+- Execution may error with `Error: Unexpected token c in JSON at position 1`
+  - **Cause**: Terraform wrapper enabled (default behavior) causes invalid JSON in Terraform output.
+  - **Fix**: Exclude the Terraform Wrapper when setting up Terraform (*GitHub Actions example*)
+    ```yaml
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+    ```
+
 ## Contributing or Submitting Issues
 
 ### Contributions are welcome!
