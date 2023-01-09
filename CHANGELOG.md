@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.3...v1.4.0) (2023-01-09)
+
+
+### Features
+
+* add job summary ([#36](https://github.com/liatrio/terraform-change-pr-commenter/issues/36)) ([01d3b49](https://github.com/liatrio/terraform-change-pr-commenter/commit/01d3b49e93cf0319d28dee2b3fbab268b6566df9))
+
 ## [1.3.2](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.1...v1.3.2) (2022-06-09)
 
 
