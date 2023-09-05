@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: liatrio/terraform-change-pr-commenter
+  # description: Add a useful description before merging
+
+  # Annotations Docs: https://backstage.io/docs/features/software-catalog/well-known-annotations
+  annotations:
+    github.com/project-slug: liatrio/terraform-change-pr-commenter
+
+  # Tags Docs: https://backstage.io/docs/features/software-catalog/descriptor-format/#metadatatags-optional
+  tags:
+    - javascript
+    - terraform
+    - github-action
+
+  # Links Docs: https://backstage.io/docs/features/software-catalog/descriptor-format/#links-optional
+  # links:
+  #   - url: https://example.com/user
+  #     title: Examples Users
+  #     icon: user
+  #   - url: https://example.com/group
+  #     title: Example Group
+  #     icon: group
+
+spec:
+  # https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required
+  type: service
+  # Review lifecycle and pick one of the three that make the most sense.
+  # https://backstage.io/docs/features/software-catalog/descriptor-format/#speclifecycle-required
+  lifecycle: production
+  # Please update to include the GitHub Team name tied to this project.
+  # https://backstage.io/docs/features/software-catalog/descriptor-format/#specowner-required
+  owner: liatrio-team-members
+
