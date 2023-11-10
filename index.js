@@ -9,9 +9,9 @@ const octokit = github.getOctokit(myToken);
 const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 
-core.info(JSON.stringify(context, null, 2);
 
 const output = () => {
+    core.info(JSON.stringify(context, null, 2);
     let body = '';
     // for each file
     for(const file of inputFilenames) {
