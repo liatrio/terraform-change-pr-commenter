@@ -16,9 +16,10 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-        working-directory: ..
+        working-directory: .
+        
       - run: yarn run build
-        working-directory: ..
+        working-directory: .
 
       - name: Test PR Commenter
         uses: ./
