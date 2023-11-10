@@ -11,7 +11,7 @@ const inputFilenames = core.getMultilineInput('json-file');
 
 
 const output = () => {
-    core.info(JSON.stringify(context, null, 2);
+    core.info(JSON.stringify(context, null, 2));
     let body = '';
     // for each file
     for(const file of inputFilenames) {
