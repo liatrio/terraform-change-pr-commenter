@@ -5,6 +5,10 @@ on:
 
 jobs:
   plan:
+    defaults:
+      run:
+        working-directory: asdf
+        
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,7 +22,7 @@ jobs:
         uses: ./
         with:
           json-file: |
-            test-data/tf_test.json
+            ${{ jobs.plan.steps.working-directory }}/test-data/tf_test.json
             test-data/tf_test2.json
             test-data/tf_test3.json
 
