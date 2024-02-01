@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.1...v1.4.2) (2024-02-01)
+
+
+### Bug Fixes
+
+* Node bump to 20 from 16 ([#51](https://github.com/liatrio/terraform-change-pr-commenter/issues/51)) ([2da4521](https://github.com/liatrio/terraform-change-pr-commenter/commit/2da45213eef1edc22a05b22bb198b0d94e0cf2a0))
+
 # [1.4.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.3.3...v1.4.0) (2023-01-09)
 
 
