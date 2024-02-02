@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.4...v1.4.5) (2024-02-02)
+
+
+### Bug Fixes
+
+* Update release.yml ([#55](https://github.com/liatrio/terraform-change-pr-commenter/issues/55)) ([d527888](https://github.com/liatrio/terraform-change-pr-commenter/commit/d5278883cce02e2713a70a70b80adbf7390a7476))
+
 ## [1.4.4](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.3...v1.4.4) (2024-02-02)
 
 
