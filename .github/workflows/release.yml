@@ -1,7 +1,9 @@
 name: Release
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  release:
+    types: [published]
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -9,11 +11,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: "20"
+
       - name: Install Dependencies
         run: yarn install
-      
+
       - name: yarn build and semantic-release
         run: yarn run build && npx semantic-release
         env:
