@@ -83,7 +83,7 @@ ${workflowLink}
                 core.info(`"The content of ${file} did not result in a valid array or the array is empty... Skipping."`)
             }
         } catch (error) {
-            core.error(`${file} is not a valid JSON file.`);
+            core.error(`${file} is not a valid JSON file. error: ${error}`);
         }
     }
     return body;
