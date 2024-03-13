@@ -13,6 +13,8 @@ const commentFooter = core.getMultilineInput('comment-footer');
 const quiteMode = core.getMultilineInput('quite');
 const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
 
+console.log(typeof commentFooter)
+
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
@@ -72,7 +74,7 @@ ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
 ${details("replace", resources_to_replace, "+")}
 </details>
-${commentFooter.replace(/,/g, '\n')}
+${commentFooter.join('\n')}
 ${workflowLink}
 `
             } else {
