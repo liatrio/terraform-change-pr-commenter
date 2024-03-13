@@ -14,7 +14,7 @@ const quiteMode = core.getMultilineInput('quite');
 const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
 
 const workflowLink = includeLinkToWorkflow ? `
-[Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.repo }/actions/runs/${ context.runId })/job/${ context.job }
+[Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
 
 let hasNoChanges = false;
