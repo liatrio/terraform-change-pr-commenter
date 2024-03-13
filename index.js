@@ -13,7 +13,6 @@ const commentFooter = core.getMultilineInput('comment-footer');
 const quiteMode = core.getMultilineInput('quite');
 const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
 
-console.log(commentFooter)
 
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
