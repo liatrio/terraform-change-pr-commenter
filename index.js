@@ -72,7 +72,7 @@ ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
 ${details("replace", resources_to_replace, "+")}
 </details>
-${commentFooter}
+${commentFooter.replace(/,/g, '\n')}
 ${workflowLink}
 `
             } else {
