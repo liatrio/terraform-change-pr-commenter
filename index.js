@@ -13,8 +13,9 @@ const commentFooter = core.getMultilineInput('comment-footer');
 const quiteMode = core.getMultilineInput('quite');
 const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
 
+
 const workflowLink = includeLinkToWorkflow ? `
-[Workflow: ${context.workflow}](${context.payload.workflow_run.html_url})
+[Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
 
 let hasNoChanges = false;
@@ -72,7 +73,7 @@ ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
 ${details("replace", resources_to_replace, "+")}
 </details>
-${commentFooter}
+${commentFooter.map(a => a == '' ? '\n' : a).join('\n')}
 ${workflowLink}
 `
             } else {
@@ -83,7 +84,7 @@ ${workflowLink}
                 core.info(`"The content of ${file} did not result in a valid array or the array is empty... Skipping."`)
             }
         } catch (error) {
-            core.error(`${file} is not a valid JSON file.`);
+            core.error(`${file} is not a valid JSON file. error: ${error}`);
         }
     }
     return body;
