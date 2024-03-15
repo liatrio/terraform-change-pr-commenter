@@ -18,7 +18,7 @@ const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
 
-let hasNoChanges = false;
+var hasNoChanges = false;
 
 const output = () => {
     let body = '';
@@ -78,6 +78,7 @@ ${workflowLink}
 `
             } else {
                 hasNoChanges = true;
+                console.log("No changes found in the plan. setting hasNoChanges to true.")
                 body += `
 <p>There were no changes done to the infrastructure.</p>
 `
@@ -126,6 +127,9 @@ try {
         process.exit(0);
     }
 
+    console.log("quiteMode", quiteMode)
+    console.log("hasNoChanges", hasNoChanges)
+    console.log("quiteMode && hasNoChanges", quiteMode && hasNoChanges)
     if (quiteMode && hasNoChanges) {
         core.info("Quite mode is enabled and there are no changes to the infrastructure.")
         core.info("Skipping comment creation.")
