@@ -12826,7 +12826,7 @@ const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 const commentHeader = core.getMultilineInput('comment-header');
 const commentFooter = core.getMultilineInput('comment-footer');
-const quiteMode = core.getMultilineInput('quite');
+const quietMode = core.getMultilineInput('quiet');
 const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
 
 
@@ -12943,11 +12943,11 @@ try {
         process.exit(0);
     }
 
-    console.log("quiteMode", quiteMode)
+    console.log("quietMode", quietMode)
     console.log("hasNoChanges", hasNoChanges)
-    console.log("quiteMode && hasNoChanges", quiteMode && hasNoChanges)
-    if (quiteMode && hasNoChanges) {
-        core.info("Quite mode is enabled and there are no changes to the infrastructure.")
+    console.log("quietMode && hasNoChanges", quietMode && hasNoChanges)
+    if (quietMode && hasNoChanges) {
+        core.info("quiet mode is enabled and there are no changes to the infrastructure.")
         core.info("Skipping comment creation.")
         process.exit(0);
     }

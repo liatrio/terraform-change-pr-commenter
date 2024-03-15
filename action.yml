@@ -32,7 +32,7 @@ inputs:
     description: If true, include a link to the workflow in the comment
     required: false
     default: false
-  quite:
+  quiet:
     description: Skips the comment if there are no changes
     required: false
     default: false

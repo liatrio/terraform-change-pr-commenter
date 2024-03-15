@@ -31,7 +31,7 @@ jobs:
           comment-header: "BIG HEADER"
           comment-footer: "BIG FOOTER"
           include-workflow-link: "true"
-          quite: "true"
+          quiet: "true"
 
       - name: Test PR Commenter with no changes
         uses: ./
