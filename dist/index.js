@@ -12826,8 +12826,8 @@ const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 const commentHeader = core.getMultilineInput('comment-header');
 const commentFooter = core.getMultilineInput('comment-footer');
-const quietMode = core.getMultilineInput('quiet');
-const includeLinkToWorkflow = core.getMultilineInput('include-workflow-link');
+const quietMode = core.getBooleanInput('quiet');
+const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
 
 
 const workflowLink = includeLinkToWorkflow ? `
@@ -12842,6 +12842,11 @@ const output = () => {
     for (const file of inputFilenames) {
         const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes;
         try {
+            let changed_resources = resource_changes.filter((resource) => {
+                return resource.change.actions != ["no-op"];
+            })
+
+            console.log("changed_resources", changed_resources)
             if (Array.isArray(resource_changes) && resource_changes.length > 0) {
                 const resources_to_create = [],
                     resources_to_update = [],
@@ -12892,6 +12897,9 @@ ${details("replace", resources_to_replace, "+")}
 ${commentFooter.map(a => a == '' ? '\n' : a).join('\n')}
 ${workflowLink}
 `
+                if (resources_to_create + resources_to_delete + resources_to_update + resources_to_replace == []) {
+                    hasNoChanges = true;
+                }
             } else {
                 hasNoChanges = true;
                 console.log("No changes found in the plan. setting hasNoChanges to true.")
@@ -12930,9 +12938,10 @@ const details = (action, resources, operator) => {
 }
 
 try {
+    let rawOutput = output();
     if (includePlanSummary) {
         core.info("Adding plan output to job summary")
-        core.summary.addHeading('Terraform Plan Results').addRaw(output()).write()
+        core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
     }
 
     if (context.eventName === 'pull_request') {
@@ -12953,13 +12962,13 @@ try {
     }
 
     core.info("Adding comment to PR");
-    core.info(`Comment: ${output()}`);
+    core.info(`Comment: ${rawOutput}`);
 
     octokit.rest.issues.createComment({
         issue_number: context.issue.number,
         owner: context.repo.owner,
         repo: context.repo.repo,
-        body: output()
+        body: rawOutput
     });
 } catch (error) {
     core.setFailed(error.message);
