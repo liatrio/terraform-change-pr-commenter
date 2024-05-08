@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
       - run: yarn install
       - run: yarn run build
 
@@ -26,14 +26,10 @@ jobs:
         uses: ./
         with:
           json-file: test-data/tf_test.json
-          expand-comment: "true"
-          include-plan-job-summary: "true"
-          comment-header: "BIG HEADER"
-          comment-footer: "BIG FOOTER"
-          include-workflow-link: "true"
-          quiet: "true"
+          expand-comment: 'true'
+          include-plan-job-summary: 'true'
 
       - name: Test PR Commenter with no changes
         uses: ./
-        with:
+        with: 
           json-file: test-data/tf_nochanges.json
