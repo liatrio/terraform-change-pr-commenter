@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.5...v1.5.0) (2024-05-08)
+
+
+### Features
+
+* additional feature additions ([#62](https://github.com/liatrio/terraform-change-pr-commenter/issues/62)) ([1465fa2](https://github.com/liatrio/terraform-change-pr-commenter/commit/1465fa28232ee9e3b51c5db1fa43f2c2f4b971e4))
+* multiple feature addition [#58](https://github.com/liatrio/terraform-change-pr-commenter/issues/58)  ([#60](https://github.com/liatrio/terraform-change-pr-commenter/issues/60)) ([01f0321](https://github.com/liatrio/terraform-change-pr-commenter/commit/01f0321246312425041b0ee8eaa5ba9404f6f1ae))
+
+
+### Reverts
+
+* Revert " feat: multiple feature addition #58  (#60)" (#63) ([ab68bb6](https://github.com/liatrio/terraform-change-pr-commenter/commit/ab68bb614b5eb42957331703bf7afa80e1188186)), closes [#58](https://github.com/liatrio/terraform-change-pr-commenter/issues/58) [#60](https://github.com/liatrio/terraform-change-pr-commenter/issues/60) [#63](https://github.com/liatrio/terraform-change-pr-commenter/issues/63)
+
 ## [1.4.5](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.4...v1.4.5) (2024-02-02)
 
 
