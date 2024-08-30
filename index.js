@@ -126,23 +126,22 @@ try {
     
     core.info(`Raw Output: ${rawOutput}`);
 
-    // Ensure the plan output is added to the job summary if includePlanSummary is true
     if (includePlanSummary && rawOutput) {
         core.info("Adding plan output to job summary");
         core.summary.addHeading('Terraform Plan Results');
         core.summary.addRaw(rawOutput);
-        await core.summary.write();  // Ensure write completes
+        await core.summary.write();
     } else if (includePlanSummary) {
         core.warning("Include plan summary is true, but rawOutput is empty or undefined.");
     }
 
     if (context.eventName === 'pull_request') {
         core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
-    } // else {
-    //     core.warning("Action doesn't seem to be running in a PR workflow context.")
-    //     core.warning("Skipping comment creation.")
-    //     process.exit(0);
-    // }
+    } else {
+        core.warning("Action doesn't seem to be running in a PR workflow context.")
+        core.warning("Skipping comment creation.")
+        process.exit(0);
+    }
 
     console.log("quietMode", quietMode)
     console.log("hasNoChanges", hasNoChanges)
@@ -156,12 +155,12 @@ try {
     core.info("Adding comment to PR");
     core.info(`Comment: ${rawOutput}`);
 
-    // octokit.rest.issues.createComment({
-    //     issue_number: context.issue.number,
-    //     owner: context.repo.owner,
-    //     repo: context.repo.repo,
-    //     body: rawOutput
-    // });
+    octokit.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: rawOutput
+    });
 } catch (error) {
     core.setFailed(error.message);
 }
