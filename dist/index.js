@@ -13851,7 +13851,6 @@ try {
     let rawOutput = output();
     let createComment = true;
 
-
     if (includePlanSummary) {
         core.info("Adding plan output to job summary")
         core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
