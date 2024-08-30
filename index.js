@@ -120,44 +120,63 @@ const details = (action, resources, operator) => {
     return str;
 }
 
-const minimizeComments = (octokit, text) => {
-    const query = `
-    query($owner: String!, $repo: String!, $prNumber: Int!) {
-      repository(owner: $owner, name: $repo) {
-        pullRequest(number: $prNumber) {
-          comments(first: 100) {
-            nodes {
-              id
-              body
-            }
+
+// GraphQL queries and mutations
+const minimizeCommentQuery = /* GraphQL */ `
+  mutation minimizeComment($id: ID!) {
+    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
+      clientMutationId
+    }
+  }
+`;
+
+const commentsQuery = /* GraphQL */ `
+  query comments($owner: String!, $name: String!, $number: Int!) {
+    repository(owner: $owner, name: $name) {
+      pullRequest(number: $number) {
+        comments(last: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+          nodes {
+            id
+            body
+            isMinimized
           }
         }
       }
-    }`;
+    }
+  }
+`;
 
-    // Fetch all comments
-    const { repository } = octokit.graphql(query, {
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        prNumber: context.issue.number
-    });
+const queryComments = (octokit, variables) => {
+  return octokit.graphql(commentsQuery, variables);
+};
 
-    core.info(repository)
+const minimizeComment = (octokit, variables) => {
+  return octokit.graphql(minimizeCommentQuery, variables);
+};
 
-    repository.pullRequest.comments.nodes
-        .filter(comment => comment.body.includes(text))
-        .forEach(comment => {
-            const minimizeQuery = `
-            mutation minimizeComment($id: ID!) {
-              minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
-                clientMutationId
-              }
-            }`;
+const hidePreviousComments = () => {
+  if (context.eventName === 'pull_request') {
+    queryComments(octokit, {
+      owner: context.repo.owner,
+      name: context.repo.repo,
+      number: context.issue.number
+    })
+    .then(response => {
+      const comments = response.repository.pullRequest.comments.nodes;
 
-            // Minimize each filtered comment
-            octokit.graphql(minimizeQuery, { id: comment.id });
+      const minimizePromises = comments
+        .filter(comment => comment.body.includes('Terraform Plan:') && !comment.isMinimized)
+        .map(comment => {
+          return minimizeComment(octokit, { id: comment.id })
+            .then(() => core.info(`Minimized comment ${comment.id}`))
+            .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
         });
-}
+
+      return Promise.all(minimizePromises);
+    })
+    .catch(error => core.error(`Failed to retrieve or minimize comments: ${error.message}`));
+  }
+};
 
 try {
     let rawOutput = output();
@@ -187,7 +206,7 @@ try {
     }
 
     if (createComment){
-        minimizeComments(octokit, 'Terraform Plan:');
+        hidePreviousComments();
     }
 
     if (createComment){
