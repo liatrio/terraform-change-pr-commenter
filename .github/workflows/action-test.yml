@@ -50,10 +50,3 @@ jobs:
         uses: ./
         with:
           json-file: test-data/tf_nochanges.json
-      
-      - name: Commit and push built code
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: "Adding compiled dist."
-          fetch: false
-          pathspec_error_handling: ignore
