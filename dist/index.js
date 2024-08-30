@@ -13037,12 +13037,10 @@ const hidePreviousComments = async () => {
       const minimizePromises = filteredComments
         .filter(comment => !comment.isMinimized)
         .map(async (comment) => {
-          core.info(`Minimizing comment ${comment.id}...`);
           try {
             await minimizeComment(octokit, { id: comment.id });
-            core.info(`Successfully minimized comment ${comment.id}.`);
           } catch (error) {
-            core.error(`Failed to minimize comment ${comment.id}: ${error.message}`);
+            core.warn(`Failed to minimize comment ${comment.id}: ${error.message}`);
           }
         });
 
@@ -13063,7 +13061,7 @@ const run = async () => {
 
         if (includePlanSummary) {
             core.info("Adding plan output to job summary")
-            core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
+            await core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
         }
 
         if (context.eventName === 'pull_request') {
@@ -13091,7 +13089,7 @@ const run = async () => {
         if (createComment){
             core.info("Adding comment to PR");
             core.info(`Comment: ${rawOutput}`);
-            octokit.rest.issues.createComment({
+            await octokit.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
