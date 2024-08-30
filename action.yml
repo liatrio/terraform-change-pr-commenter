@@ -15,11 +15,11 @@ inputs:
   expand-comment:
     description: If true, expand the details comment by default
     required: false
-    default: "false"
+    default: false
   include-plan-job-summary:
     description: If true, add the results of the plan to the workflow job summary
     required: false
-    default: "false"
+    default: false
   comment-header:
     description: Header to use for the comment
     required: false

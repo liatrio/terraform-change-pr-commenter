@@ -123,14 +123,17 @@ const details = (action, resources, operator) => {
 
 try {
     let rawOutput = output();
-    // if (includePlanSummary) {
-    //     core.info("Adding plan output to job summary")
-    //     core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
-    // }
-    // Always add the plan output to the job summary if includePlanSummary is true
+    
+    core.info(`Raw Output: ${rawOutput}`);
+
+    // Ensure the plan output is added to the job summary if includePlanSummary is true
     if (includePlanSummary && rawOutput) {
-        core.info("Adding plan output to job summary")
-        core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
+        core.info("Adding plan output to job summary");
+        core.summary.addHeading('Terraform Plan Results');
+        core.summary.addRaw(rawOutput);
+        await core.summary.write();  // Ensure write completes
+    } else if (includePlanSummary) {
+        core.warning("Include plan summary is true, but rawOutput is empty or undefined.");
     }
 
     if (context.eventName === 'pull_request') {
