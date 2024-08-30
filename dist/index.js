@@ -12835,6 +12835,31 @@ const workflowLink = includeLinkToWorkflow ? `
 
 var hasNoChanges = false;
 
+// GraphQL queries and mutations
+const minimizeCommentQuery = /* GraphQL */ `
+  mutation minimizeComment($id: ID!) {
+    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
+      clientMutationId
+    }
+  }
+`;
+
+const commentsQuery = /* GraphQL */ `
+  query comments($owner: String!, $name: String!, $number: Int!) {
+    repository(owner: $owner, name: $name) {
+      pullRequest(number: $number) {
+        comments(last: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+          nodes {
+            id
+            body
+            isMinimized
+          }
+        }
+      }
+    }
+  }
+`;
+
 const output = () => {
     let body = '';
     // for each file
@@ -12936,32 +12961,6 @@ const details = (action, resources, operator) => {
     return str;
 }
 
-
-// GraphQL queries and mutations
-const minimizeCommentQuery = /* GraphQL */ `
-  mutation minimizeComment($id: ID!) {
-    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
-      clientMutationId
-    }
-  }
-`;
-
-const commentsQuery = /* GraphQL */ `
-  query comments($owner: String!, $name: String!, $number: Int!) {
-    repository(owner: $owner, name: $name) {
-      pullRequest(number: $number) {
-        comments(last: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
-          nodes {
-            id
-            body
-            isMinimized
-          }
-        }
-      }
-    }
-  }
-`;
-
 const queryComments = (octokit, variables) => {
   return octokit.graphql(commentsQuery, variables);
 };
@@ -12972,16 +12971,23 @@ const minimizeComment = (octokit, variables) => {
 
 const hidePreviousComments = () => {
   if (context.eventName === 'pull_request') {
+    core.info(`Hiding previous comments.`);
+    core.info(`Retrieving comments for PR #${context.issue.number}...`);
+
     queryComments(octokit, {
       owner: context.repo.owner,
       name: context.repo.repo,
       number: context.issue.number
     })
     .then(response => {
+      core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
       const comments = response.repository.pullRequest.comments.nodes;
+
+      core.info(`Found ${comments.length} comments in the PR.`);
 
       const minimizePromises = comments
         .filter(comment => comment.body.includes('Terraform Plan:') && !comment.isMinimized)
+        .filter(comment => comment.body.includes('There were no changes done to the infrastructure.') && !comment.isMinimized)
         .map(comment => {
           return minimizeComment(octokit, { id: comment.id })
             .then(() => core.info(`Minimized comment ${comment.id}`))
@@ -12991,6 +12997,8 @@ const hidePreviousComments = () => {
       return Promise.all(minimizePromises);
     })
     .catch(error => core.error(`Failed to retrieve or minimize comments: ${error.message}`));
+  } else {
+    core.info('Not a pull request event. Skipping comment minimization.');
   }
 };
 
