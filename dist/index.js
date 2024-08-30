@@ -13680,7 +13680,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const fs = __nccwpck_require__(7147);
-const graphql = __nccwpck_require__(8467);
+const { graphql } = __nccwpck_require__(8467);
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
 const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
