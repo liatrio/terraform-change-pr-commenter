@@ -142,6 +142,8 @@ const minimizeComments = (octokit, text) => {
         prNumber: context.issue.number
     });
 
+    core.info(repository)
+
     repository.pullRequest.comments.nodes
         .filter(comment => comment.body.includes(text))
         .forEach(comment => {
