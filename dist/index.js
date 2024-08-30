@@ -12972,7 +12972,6 @@ const minimizeComment = (octokit, variables) => {
 const hidePreviousComments = () => {
   if (context.eventName === 'pull_request') {
     core.info(`Hiding previous comments.`);
-    core.info(`Retrieving comments for PR #${context.issue.number}...`);
 
     queryComments(octokit, {
       owner: context.repo.owner,
@@ -12985,18 +12984,28 @@ const hidePreviousComments = () => {
 
       core.info(`Found ${comments.length} comments in the PR.`);
 
-      const minimizePromises = comments
-        .filter(comment => comment.body.includes('Terraform Plan:') && !comment.isMinimized)
-        .filter(comment => comment.body.includes('There were no changes done to the infrastructure.') && !comment.isMinimized)
+      // Filter comments based on the criteria
+      const filteredComments = comments.filter(comment => 
+        comment.body.includes('Terraform Plan:') || 
+        comment.body.includes('There were no changes done to the infrastructure.')
+      );
+
+      core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
+
+      const minimizePromises = filteredComments
+        .filter(comment => !comment.isMinimized)
         .map(comment => {
+          core.info(`Minimizing comment ${comment.id}...`);
           return minimizeComment(octokit, { id: comment.id })
-            .then(() => core.info(`Minimized comment ${comment.id}`))
+            .then(() => core.info(`Successfully minimized comment ${comment.id}.`))
             .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
         });
 
-      return Promise.all(minimizePromises);
+      return Promise.all(minimizePromises)
+        .then(() => core.info('All minimize operations completed.'))
+        .catch(error => core.error(`Error during minimize operations: ${error.message}`));
     })
-    .catch(error => core.error(`Failed to retrieve or minimize comments: ${error.message}`));
+    .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
   } else {
     core.info('Not a pull request event. Skipping comment minimization.');
   }
