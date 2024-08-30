@@ -148,10 +148,10 @@ const minimizePreviousComment = (commentId) => {
 const findAndMinimizePreviousComment = () => {
     if (context.eventName === 'pull_request') {
         try {
-            const comments = octokit.rest.issues.listComments({
+            const comments = octokit.rest.pulls.listReviewComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                pull_number: context.issue.number,
             });
 
             const previousComments = comments.data.filter(comment => {
