@@ -113,7 +113,7 @@ with:
 
 To use this action with OpenTofu you need to initialize OpenTofu without the wrapper, like discussed in the `known issues` below.
 
-But you also need to convert the planfile to a JSON planfile using the `tofu show -json` command.
+**You also need to convert the planfile to a JSON planfile using the `tofu show -json` command.**
 
 ```yaml
   - uses: opentofu/setup-opentofu@v1
@@ -149,7 +149,7 @@ But you also need to convert the planfile to a JSON planfile using the `tofu sho
 ### Contributions are welcome!
 If you'd like to suggest changes, feel free to submit a Pull Request or [open an issue](https://github.com/liatrio/terraform-change-pr-commenter/issues/new).
 
-Otherwise if things aren't working as expected, please [open a new issue](https://github.com/liatrio/terraform-change-pr-commenter/issues/new). Pleae include code references, a description of the issue, and expected behavior.
+Otherwise if things aren't working as expected, please [open a new issue](https://github.com/liatrio/terraform-change-pr-commenter/issues/new). Please include code references, a description of the issue, and expected behavior.
 
 --- 
 ![CodeQL Security Scan](https://github.com/liatrio/terraform-change-pr-commenter/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)
