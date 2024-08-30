@@ -137,10 +137,18 @@ try {
 
     if (context.eventName === 'pull_request') {
         core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+        core.info("Adding comment to PR");
+        core.info(`Comment: ${rawOutput}`);
+
+        octokit.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: rawOutput
+        });
     } else {
         core.warning("Action doesn't seem to be running in a PR workflow context.")
         core.warning("Skipping comment creation.")
-        process.exit(0);
     }
 
     console.log("quietMode", quietMode)
@@ -149,18 +157,7 @@ try {
     if (quietMode && hasNoChanges) {
         core.info("quiet mode is enabled and there are no changes to the infrastructure.")
         core.info("Skipping comment creation.")
-        process.exit(0);
-    }
-
-    core.info("Adding comment to PR");
-    core.info(`Comment: ${rawOutput}`);
-
-    octokit.rest.issues.createComment({
-        issue_number: context.issue.number,
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        body: rawOutput
-    });
+    }    
 } catch (error) {
     core.setFailed(error.message);
 }
