@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-const graphql = require('@octokit/graphql');
+const { graphql } = require('@octokit/graphql');
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
 const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
