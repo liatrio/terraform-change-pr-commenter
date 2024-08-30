@@ -28,7 +28,7 @@ jobs:
         uses: ./
         with:
           comment-header: "Testing with no changes but previous comment should be hidden."
-          json-file: test-data/tf_nochanges.json
+          json-file: test-data/tf_test.json
           hide-previous-comments: true
 
       - name: Test PR Comment Expand feature
