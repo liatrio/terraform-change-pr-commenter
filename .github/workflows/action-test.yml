@@ -23,13 +23,17 @@ jobs:
             test-data/tf_test.json
             test-data/tf_test2.json
             test-data/tf_test3.json
-      
-      - name: Test hide previous PR comments
+
+      - name: Test PR comment hiding
         uses: ./
         with:
-          comment-header: "Testing with no changes but previous comment should be hidden."
-          json-file: test-data/tf_test.json
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+            test-data/tf_test3.json
           hide-previous-comments: true
+          comment-footer: "Same as previous but previous comment should be hidden."
+          
 
       - name: Test PR Comment Expand feature
         uses: ./
