@@ -130,7 +130,7 @@ try {
         core.info("Adding plan output to job summary");
         core.summary.addHeading('Terraform Plan Results');
         core.summary.addRaw(rawOutput);
-        await core.summary.write();
+        core.summary.write();
     } else if (includePlanSummary) {
         core.warning("Include plan summary is true, but rawOutput is empty or undefined.");
     }
