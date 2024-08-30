@@ -123,32 +123,20 @@ const details = (action, resources, operator) => {
 
 try {
     let rawOutput = output();
-    
-    core.info(`Raw Output: ${rawOutput}`);
+    let commentPr = true;
 
-    if (includePlanSummary && rawOutput) {
-        core.info("Adding plan output to job summary");
-        core.summary.addHeading('Terraform Plan Results');
-        core.summary.addRaw(rawOutput);
-        core.summary.write();
-    } else if (includePlanSummary) {
-        core.warning("Include plan summary is true, but rawOutput is empty or undefined.");
+    if (includePlanSummary) {
+        core.info("Adding plan output to job summary")
+        core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
     }
 
     if (context.eventName === 'pull_request') {
         core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
-        core.info("Adding comment to PR");
-        core.info(`Comment: ${rawOutput}`);
-
-        octokit.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: rawOutput
-        });
+        
     } else {
-        core.warning("Action doesn't seem to be running in a PR workflow context.")
-        core.warning("Skipping comment creation.")
+        core.info("Action doesn't seem to be running in a PR workflow context.")
+        core.info("Skipping comment creation.")
+        commentPr = false
     }
 
     console.log("quietMode", quietMode)
@@ -157,7 +145,21 @@ try {
     if (quietMode && hasNoChanges) {
         core.info("quiet mode is enabled and there are no changes to the infrastructure.")
         core.info("Skipping comment creation.")
-    }    
+        commentPr = false
+    }   
+
+    if (commentPr){
+        core.info("Adding comment to PR");
+        core.info(`Comment: ${rawOutput}`);
+        octokit.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: rawOutput
+        });
+        core.info("Comment added successfully.");
+    }
+    
 } catch (error) {
     core.setFailed(error.message);
 }
