@@ -12828,6 +12828,7 @@ const commentHeader = core.getMultilineInput('comment-header');
 const commentFooter = core.getMultilineInput('comment-footer');
 const quietMode = core.getBooleanInput('quiet');
 const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
+const hidePreviousComments = core.getBooleanInput('hide-previous-comments');
 
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
@@ -12969,45 +12970,41 @@ const minimizeComment = (octokit, variables) => {
   return octokit.graphql(minimizeCommentQuery, variables);
 };
 
-const hidePreviousComments = () => {
-  if (context.eventName === 'pull_request') {
-    core.info(`Hiding previous comments.`);
+const minimizePreviousComments = () => {
+  core.info(`Hiding previous comments.`);
 
-    queryComments(octokit, {
-      owner: context.repo.owner,
-      name: context.repo.repo,
-      number: context.issue.number
+  queryComments(octokit, {
+    owner: context.repo.owner,
+    name: context.repo.repo,
+    number: context.issue.number
+  })
+    .then(response => {
+      core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
+      const comments = response.repository.pullRequest.comments.nodes;
+
+      core.info(`Found ${comments.length} comments in the PR.`);
+
+      const filteredComments = comments.filter(comment =>
+        comment.body.includes('Terraform Plan:') ||
+        comment.body.includes('There were no changes done to the infrastructure.')
+      );
+
+      core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
+
+      const minimizePromises = filteredComments
+        .filter(comment => !comment.isMinimized)
+        .map(comment => {
+          core.info(`Minimizing comment ${comment.id}...`);
+          return minimizeComment(octokit, { id: comment.id })
+            .then(() => core.info(`Successfully minimized comment ${comment.id}.`))
+            .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
+        });
+
+      return Promise.all(minimizePromises)
+        .then(() => core.info('All minimize operations completed.'))
+        .catch(error => core.error(`Error during minimize operations: ${error.message}`));
     })
-      .then(response => {
-        core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
-        const comments = response.repository.pullRequest.comments.nodes;
-
-        core.info(`Found ${comments.length} comments in the PR.`);
-
-        const filteredComments = comments.filter(comment =>
-          comment.body.includes('Terraform Plan:') ||
-          comment.body.includes('There were no changes done to the infrastructure.')
-        );
-
-        core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
-
-        const minimizePromises = filteredComments
-          .filter(comment => !comment.isMinimized)
-          .map(comment => {
-            core.info(`Minimizing comment ${comment.id}...`);
-            return minimizeComment(octokit, { id: comment.id })
-              .then(() => core.info(`Successfully minimized comment ${comment.id}.`))
-              .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
-          });
-
-        return Promise.all(minimizePromises)
-          .then(() => core.info('All minimize operations completed.'))
-          .catch(error => core.error(`Error during minimize operations: ${error.message}`));
-      })
-      .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
-  } else {
-    core.info('Not a pull request event. Skipping comment minimization.');
-  }
+    .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
 };
 
 
@@ -13015,18 +13012,16 @@ try {
   let rawOutput = output();
   let createComment = true;
 
+  console.log("hidePreviousComments", hidePreviousComments)
+  console.log("hidePreviousComments && context.eventName === pull_request", hidePreviousComments && context.eventName === 'pull_request')
+  if (hidePreviousComments && context.eventName === 'pull_request') {
+    minimizePreviousComments();
+  }
+
+  console.log("includePlanSummary", includePlanSummary)
   if (includePlanSummary) {
     core.info("Adding plan output to job summary")
     core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
-  }
-
-  if (context.eventName === 'pull_request') {
-    core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
-
-  } else {
-    core.info("Action doesn't seem to be running in a PR workflow context.")
-    core.info("Skipping comment creation.")
-    createComment = false
   }
 
   console.log("quietMode", quietMode)
@@ -13038,8 +13033,12 @@ try {
     createComment = false
   }
 
-  if (createComment) {
-    hidePreviousComments();
+  if (context.eventName === 'pull_request') {
+    core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+  } else {
+    core.info("Action doesn't seem to be running in a PR workflow context.")
+    core.info("Skipping comment creation.")
+    createComment = false
   }
 
   if (createComment) {
