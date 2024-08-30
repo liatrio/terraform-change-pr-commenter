@@ -123,7 +123,12 @@ const details = (action, resources, operator) => {
 
 try {
     let rawOutput = output();
-    if (includePlanSummary) {
+    // if (includePlanSummary) {
+    //     core.info("Adding plan output to job summary")
+    //     core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
+    // }
+    // Always add the plan output to the job summary if includePlanSummary is true
+    if (includePlanSummary && rawOutput) {
         core.info("Adding plan output to job summary")
         core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
     }
