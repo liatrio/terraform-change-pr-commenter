@@ -131,9 +131,9 @@ const MINIMIZE_COMMENT_MUTATION = `
   }
 `;
 
-const minimizePreviousComment = async (commentId) => {
+const minimizePreviousComment = (commentId) => {
     try {
-        await graphql(MINIMIZE_COMMENT_MUTATION, {
+        graphql(MINIMIZE_COMMENT_MUTATION, {
             id: commentId,
             headers: {
                 authorization: `token ${myToken}`
@@ -145,10 +145,10 @@ const minimizePreviousComment = async (commentId) => {
     }
 };
 
-const findAndMinimizePreviousComment = async () => {
+const findAndMinimizePreviousComment = () => {
     if (context.eventName === 'pull_request') {
         try {
-            const comments = await octokit.rest.issues.listComments({
+            const comments = octokit.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
@@ -160,7 +160,7 @@ const findAndMinimizePreviousComment = async () => {
 
             if (previousComments.length > 0) {
                 const commentToMinimize = previousComments[previousComments.length - 1];
-                await minimizePreviousComment(commentToMinimize.id);
+                minimizePreviousComment(commentToMinimize.id);
             }
         } catch (error) {
             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
