@@ -36,6 +36,10 @@ inputs:
     description: Skips the comment if there are no changes
     required: false
     default: false
+  hide-previous-comments:
+    description: Hides privious comments on the PR
+    required: false
+    default: false
 runs:
   using: node20
   main: dist/index.js

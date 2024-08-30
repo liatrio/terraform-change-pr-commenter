@@ -16,6 +16,12 @@ jobs:
       - run: yarn install
       - run: yarn run build
 
+      - name: Test hide previous PR comments
+        uses: ./
+        with:
+          json-file: test-data/tf_nochanges.json
+          hide-previous-comments: true
+
       - name: Test PR Commenter
         uses: ./
         with:
