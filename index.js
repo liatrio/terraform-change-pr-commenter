@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-const { graphql } = require('@octokit/graphql');
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
 const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
@@ -13,7 +12,6 @@ const commentHeader = core.getMultilineInput('comment-header');
 const commentFooter = core.getMultilineInput('comment-footer');
 const quietMode = core.getBooleanInput('quiet');
 const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
-
 
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
@@ -122,91 +120,42 @@ const details = (action, resources, operator) => {
     return str;
 }
 
-// GraphQL query for minimizing a comment
-const MINIMIZE_COMMENT_MUTATION = `
-  mutation minimizeComment($id: ID!) {
-    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
-      clientMutationId
-    }
-  }
-`;
-
-const minimizePreviousComment = (commentId) => {
-    try {
-        graphql(MINIMIZE_COMMENT_MUTATION, {
-            id: commentId,
-            headers: {
-                authorization: `token ${myToken}`
+const minimizeComments = (octokit, text) => {
+    const query = `
+    query($owner: String!, $repo: String!, $prNumber: Int!) {
+      repository(owner: $owner, name: $repo) {
+        pullRequest(number: $prNumber) {
+          comments(first: 100) {
+            nodes {
+              id
+              body
             }
-        });
-        core.info(`Minimized previous comment with ID ${commentId}`);
-    } catch (error) {
-        core.error(`Error while minimizing previous comment: ${error.message}`);
-    }
-};
-
-const findAndMinimizePreviousComment = () => {
-        try {
-            const comments = octokit.rest.issues.getComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-            });
-            console.log("all comments: ", comments);
-
-            const previousComments = comments.data.filter(comment => {
-                return comment.body.includes('Terraform Plan:');
-            });
-            console.log("previous comments: ", previousComments);
-
-
-            if (previousComments.length > 0) {
-                const commentToMinimize = previousComments[previousComments.length - 1];
-                console.log("comments to minimize: ", commentToMinimize)
-                minimizePreviousComment(commentToMinimize.id);
-            }
-        } catch (error) {
-            core.error(`Error while finding and minimizing previous comment: ${error.message}`);
+          }
         }
-};
+      }
+    }`;
 
-// const findAndMinimizePreviousComment = () => {
-//     if (context.eventName === 'pull_request') {
-//         core.info(`Fetching review comments for PR #${context.issue.number}`);
+    // Fetch all comments
+    const { repository } = octokit.graphql(query, {
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        prNumber: context.issue.number
+    });
 
-//         octokit.rest.issues.getComment({
-//             owner: context.repo.owner,
-//             repo: context.repo.repo,
-//             issue_number: context.issue.number,
-//         })
-//         .then(response => {
-//             // Log the response to inspect its structure
-//             core.info(`Response from GitHub API: ${JSON.stringify(response, null, 2)}`);
+    repository.pullRequest.comments.nodes
+        .filter(comment => comment.body.includes(text))
+        .forEach(comment => {
+            const minimizeQuery = `
+            mutation minimizeComment($id: ID!) {
+              minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
+                clientMutationId
+              }
+            }`;
 
-//             if (!response.data) {
-//                 throw new Error('No data found in the response.');
-//             }
-
-//             const previousComments = response.data.filter(comment => {
-//                 return comment.body.includes('Terraform Plan:');
-//             });
-
-//             if (previousComments.length > 0) {
-//                 const commentToMinimize = previousComments[previousComments.length - 1];
-//                 return minimizePreviousComment(commentToMinimize.id);
-//             } else {
-//                 core.info('No previous comments found to minimize.');
-//                 return Promise.resolve(); // Resolve to maintain promise chain
-//             }
-//         })
-//         .then(() => {
-//             core.info('Previous comment minimized successfully.');
-//         })
-//         .catch(error => {
-//             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
-//         });
-//     }
-// };
+            // Minimize each filtered comment
+            octokit.graphql(minimizeQuery, { id: comment.id });
+        });
+}
 
 try {
     let rawOutput = output();
@@ -236,8 +185,7 @@ try {
     }
 
     if (createComment){
-        core.info(`Minimizing previous comment.`);
-        findAndMinimizePreviousComment();
+        minimizeComments(octokit, 'Terraform Plan:');
     }
 
     if (createComment){
