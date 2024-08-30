@@ -145,69 +145,69 @@ const minimizePreviousComment = (commentId) => {
     }
 };
 
-// const findAndMinimizePreviousComment = async () => {
-//     if (context.eventName === 'pull_request') {
-//         try {
-//             const comments = await octokit.rest.pulls.listReviewComments({
-//                 owner: context.repo.owner,
-//                 repo: context.repo.repo,
-//                 pull_number: context.issue.number,
-//             });
-//             core.info(comments);
-
-//             const previousComments = comments.data.filter(comment => {
-//                 return comment.body.includes('Terraform Plan:');
-//             });
-//             core.info(previousComments);
-
-
-//             if (previousComments.length > 0) {
-//                 const commentToMinimize = previousComments[previousComments.length - 1];
-//                 minimizePreviousComment(commentToMinimize.id);
-//             }
-//         } catch (error) {
-//             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
-//         }
-//     }
-// };
-
-const findAndMinimizePreviousComment = () => {
+const findAndMinimizePreviousComment = async () => {
     if (context.eventName === 'pull_request') {
-        core.info(`Fetching review comments for PR #${context.issue.number}`);
+        try {
+            const comments = await octokit.rest.issues.getComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            });
+            core.info(comments);
 
-        octokit.rest.issues.getComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-        })
-        .then(response => {
-            // Log the response to inspect its structure
-            core.info(`Response from GitHub API: ${JSON.stringify(response, null, 2)}`);
-
-            if (!response.data) {
-                throw new Error('No data found in the response.');
-            }
-
-            const previousComments = response.data.filter(comment => {
+            const previousComments = comments.data.filter(comment => {
                 return comment.body.includes('Terraform Plan:');
             });
+            core.info(previousComments);
+
 
             if (previousComments.length > 0) {
                 const commentToMinimize = previousComments[previousComments.length - 1];
-                return minimizePreviousComment(commentToMinimize.id);
-            } else {
-                core.info('No previous comments found to minimize.');
-                return Promise.resolve(); // Resolve to maintain promise chain
+                minimizePreviousComment(commentToMinimize.id);
             }
-        })
-        .then(() => {
-            core.info('Previous comment minimized successfully.');
-        })
-        .catch(error => {
+        } catch (error) {
             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
-        });
+        }
     }
 };
+
+// const findAndMinimizePreviousComment = () => {
+//     if (context.eventName === 'pull_request') {
+//         core.info(`Fetching review comments for PR #${context.issue.number}`);
+
+//         octokit.rest.issues.getComment({
+//             owner: context.repo.owner,
+//             repo: context.repo.repo,
+//             issue_number: context.issue.number,
+//         })
+//         .then(response => {
+//             // Log the response to inspect its structure
+//             core.info(`Response from GitHub API: ${JSON.stringify(response, null, 2)}`);
+
+//             if (!response.data) {
+//                 throw new Error('No data found in the response.');
+//             }
+
+//             const previousComments = response.data.filter(comment => {
+//                 return comment.body.includes('Terraform Plan:');
+//             });
+
+//             if (previousComments.length > 0) {
+//                 const commentToMinimize = previousComments[previousComments.length - 1];
+//                 return minimizePreviousComment(commentToMinimize.id);
+//             } else {
+//                 core.info('No previous comments found to minimize.');
+//                 return Promise.resolve(); // Resolve to maintain promise chain
+//             }
+//         })
+//         .then(() => {
+//             core.info('Previous comment minimized successfully.');
+//         })
+//         .catch(error => {
+//             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
+//         });
+//     }
+// };
 
 try {
     let rawOutput = output();
