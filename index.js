@@ -240,49 +240,53 @@ const hidePreviousComments = async () => {
   }
 };
 
-try {
-    let rawOutput = output();
-    let createComment = true;
+const run = async () => {
+    try {
+        let rawOutput = output();
+        let createComment = true;
 
-    if (includePlanSummary) {
-        core.info("Adding plan output to job summary")
-        core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
-    }
+        if (includePlanSummary) {
+            core.info("Adding plan output to job summary")
+            core.summary.addHeading('Terraform Plan Results').addRaw(rawOutput).write()
+        }
 
-    if (context.eventName === 'pull_request') {
-        core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+        if (context.eventName === 'pull_request') {
+            core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
+            
+        } else {
+            core.info("Action doesn't seem to be running in a PR workflow context.")
+            core.info("Skipping comment creation.")
+            createComment = false
+        }
+
+        console.log("quietMode", quietMode)
+        console.log("hasNoChanges", hasNoChanges)
+        console.log("quietMode && hasNoChanges", quietMode && hasNoChanges)
+        if (quietMode && hasNoChanges) {
+            core.info("quiet mode is enabled and there are no changes to the infrastructure.")
+            core.info("Skipping comment creation.")
+            createComment = false
+        }
+
+        if (createComment){
+            await hidePreviousComments();
+        }
+
+        if (createComment){
+            core.info("Adding comment to PR");
+            core.info(`Comment: ${rawOutput}`);
+            octokit.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: rawOutput
+            });
+            core.info("Comment added successfully.");
+        }
         
-    } else {
-        core.info("Action doesn't seem to be running in a PR workflow context.")
-        core.info("Skipping comment creation.")
-        createComment = false
+    } catch (error) {
+        core.setFailed(error.message);
     }
-
-    console.log("quietMode", quietMode)
-    console.log("hasNoChanges", hasNoChanges)
-    console.log("quietMode && hasNoChanges", quietMode && hasNoChanges)
-    if (quietMode && hasNoChanges) {
-        core.info("quiet mode is enabled and there are no changes to the infrastructure.")
-        core.info("Skipping comment creation.")
-        createComment = false
-    }
-
-    if (createComment){
-        await hidePreviousComments();
-    }
-
-    if (createComment){
-        core.info("Adding comment to PR");
-        core.info(`Comment: ${rawOutput}`);
-        octokit.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: rawOutput
-        });
-        core.info("Comment added successfully.");
-    }
-    
-} catch (error) {
-    core.setFailed(error.message);
 }
+
+run();
