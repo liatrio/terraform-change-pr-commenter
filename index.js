@@ -6,6 +6,11 @@ const expandDetailsComment = core.getBooleanInput('expand-comment');
 const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
+const graphql = require('@octokit/graphql').defaults({
+  headers: {
+    authorization: `token ${myToken}`
+  }
+});
 const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 const commentHeader = core.getMultilineInput('comment-header');
@@ -17,6 +22,15 @@ const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
+
+// GraphQL query for minimizing a comment
+const MINIMIZE_COMMENT_MUTATION = `
+  mutation minimizeComment($id: ID!) {
+    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
+      clientMutationId
+    }
+  }
+`;
 
 var hasNoChanges = false;
 
@@ -121,9 +135,42 @@ const details = (action, resources, operator) => {
     return str;
 }
 
+const minimizePreviousComment = (commentId) => {
+    try {
+        graphql(MINIMIZE_COMMENT_MUTATION, {
+            id: commentId
+        });
+        core.info(`Minimized previous comment with ID ${commentId}`);
+    } catch (error) {
+        core.error(`Error while minimizing previous comment: ${error.message}`);
+    }
+};
+
+const findAndMinimizePreviousComment = () => {
+    try {
+        const comments = octokit.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+        });
+
+        const previousComments = comments.data.filter(comment => {
+            return comment.body.includes('Terraform Plan:');
+        });
+
+        if (previousComments.length > 0) {
+            const commentToMinimize = previousComments[previousComments.length - 1];
+            minimizePreviousComment(commentToMinimize.id);
+        }
+    } catch (error) {
+        core.error(`Error while finding and minimizing previous comment: ${error.message}`);
+    }
+    
+};
+
 try {
     let rawOutput = output();
-    let commentPr = true;
+    let createComment = true;
 
     if (includePlanSummary) {
         core.info("Adding plan output to job summary")
@@ -136,7 +183,7 @@ try {
     } else {
         core.info("Action doesn't seem to be running in a PR workflow context.")
         core.info("Skipping comment creation.")
-        commentPr = false
+        createComment = false
     }
 
     console.log("quietMode", quietMode)
@@ -145,10 +192,15 @@ try {
     if (quietMode && hasNoChanges) {
         core.info("quiet mode is enabled and there are no changes to the infrastructure.")
         core.info("Skipping comment creation.")
-        commentPr = false
-    }   
+        createComment = false
+    }
 
-    if (commentPr){
+    if (createComment){
+        core.info(`Minimizing previous comment.`);
+        findAndMinimizePreviousComment();
+    }
+
+    if (createComment){
         core.info("Adding comment to PR");
         core.info(`Comment: ${rawOutput}`);
         octokit.rest.issues.createComment({
