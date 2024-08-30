@@ -175,10 +175,10 @@ const findAndMinimizePreviousComment = () => {
     if (context.eventName === 'pull_request') {
         core.info(`Fetching review comments for PR #${context.issue.number}`);
 
-        octokit.rest.pulls.listReviewComments({
+        octokit.rest.issues.getComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            pull_number: context.issue.number,
+            issue_number: context.issue.number,
         })
         .then(response => {
             // Log the response to inspect its structure
