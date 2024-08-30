@@ -1,16 +1,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
+const graphql = require('@octokit/graphql');
 
 const expandDetailsComment = core.getBooleanInput('expand-comment');
 const includePlanSummary = core.getBooleanInput('include-plan-job-summary');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken);
-const graphql = require('@octokit/graphql').defaults({
-  headers: {
-    authorization: `token ${myToken}`
-  }
-});
 const context = github.context;
 const inputFilenames = core.getMultilineInput('json-file');
 const commentHeader = core.getMultilineInput('comment-header');
@@ -22,15 +18,6 @@ const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/actions/runs/${ context.runId })
 ` : "";
-
-// GraphQL query for minimizing a comment
-const MINIMIZE_COMMENT_MUTATION = `
-  mutation minimizeComment($id: ID!) {
-    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
-      clientMutationId
-    }
-  }
-`;
 
 var hasNoChanges = false;
 
@@ -135,10 +122,22 @@ const details = (action, resources, operator) => {
     return str;
 }
 
-const minimizePreviousComment = (commentId) => {
+// GraphQL query for minimizing a comment
+const MINIMIZE_COMMENT_MUTATION = `
+  mutation minimizeComment($id: ID!) {
+    minimizeComment(input: { classifier: OUTDATED, subjectId: $id }) {
+      clientMutationId
+    }
+  }
+`;
+
+const minimizePreviousComment = async (commentId) => {
     try {
-        graphql(MINIMIZE_COMMENT_MUTATION, {
-            id: commentId
+        await graphql(MINIMIZE_COMMENT_MUTATION, {
+            id: commentId,
+            headers: {
+                authorization: `token ${myToken}`
+            }
         });
         core.info(`Minimized previous comment with ID ${commentId}`);
     } catch (error) {
@@ -146,26 +145,27 @@ const minimizePreviousComment = (commentId) => {
     }
 };
 
-const findAndMinimizePreviousComment = () => {
-    try {
-        const comments = octokit.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-        });
+const findAndMinimizePreviousComment = async () => {
+    if (context.eventName === 'pull_request') {
+        try {
+            const comments = await octokit.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            });
 
-        const previousComments = comments.data.filter(comment => {
-            return comment.body.includes('Terraform Plan:');
-        });
+            const previousComments = comments.data.filter(comment => {
+                return comment.body.includes('Terraform Plan:');
+            });
 
-        if (previousComments.length > 0) {
-            const commentToMinimize = previousComments[previousComments.length - 1];
-            minimizePreviousComment(commentToMinimize.id);
+            if (previousComments.length > 0) {
+                const commentToMinimize = previousComments[previousComments.length - 1];
+                await minimizePreviousComment(commentToMinimize.id);
+            }
+        } catch (error) {
+            core.error(`Error while finding and minimizing previous comment: ${error.message}`);
         }
-    } catch (error) {
-        core.error(`Error while finding and minimizing previous comment: ${error.message}`);
     }
-    
 };
 
 try {
