@@ -153,24 +153,66 @@ const minimizeComment = (octokit, variables) => {
   return octokit.graphql(minimizeCommentQuery, variables);
 };
 
-const hidePreviousComments = () => {
+// const hidePreviousComments = () => {
+//   if (context.eventName === 'pull_request') {
+//     core.info(`Hiding previous comments.`);
+
+//     queryComments(octokit, {
+//       owner: context.repo.owner,
+//       name: context.repo.repo,
+//       number: context.issue.number
+//     })
+//     .then(response => {
+//       core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
+//       const comments = response.repository.pullRequest.comments.nodes;
+
+//       core.info(`Found ${comments.length} comments in the PR.`);
+
+//       // Filter comments based on the criteria
+//       const filteredComments = comments.filter(comment => 
+//         comment.body.includes('Terraform Plan:') || 
+//         comment.body.includes('There were no changes done to the infrastructure.')
+//       );
+
+//       core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
+
+//       const minimizePromises = filteredComments
+//         .filter(comment => !comment.isMinimized)
+//         .map(comment => {
+//           core.info(`Minimizing comment ${comment.id}...`);
+//           return minimizeComment(octokit, { id: comment.id })
+//             .then(() => core.info(`Successfully minimized comment ${comment.id}.`))
+//             .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
+//         });
+
+//       return Promise.all(minimizePromises)
+//         .then(() => core.info('All minimize operations completed.'))
+//         .catch(error => core.error(`Error during minimize operations: ${error.message}`));
+//     })
+//     .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
+//   } else {
+//     core.info('Not a pull request event. Skipping comment minimization.');
+//   }
+// };
+const hidePreviousComments = async () => {
   if (context.eventName === 'pull_request') {
     core.info(`Hiding previous comments.`);
 
-    queryComments(octokit, {
-      owner: context.repo.owner,
-      name: context.repo.repo,
-      number: context.issue.number
-    })
-    .then(response => {
+    try {
+      const response = await queryComments(octokit, {
+        owner: context.repo.owner,
+        name: context.repo.repo,
+        number: context.issue.number
+      });
+
       core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
       const comments = response.repository.pullRequest.comments.nodes;
 
       core.info(`Found ${comments.length} comments in the PR.`);
 
       // Filter comments based on the criteria
-      const filteredComments = comments.filter(comment => 
-        comment.body.includes('Terraform Plan:') || 
+      const filteredComments = comments.filter(comment =>
+        comment.body.includes('Terraform Plan:') ||
         comment.body.includes('There were no changes done to the infrastructure.')
       );
 
@@ -178,18 +220,21 @@ const hidePreviousComments = () => {
 
       const minimizePromises = filteredComments
         .filter(comment => !comment.isMinimized)
-        .map(comment => {
+        .map(async (comment) => {
           core.info(`Minimizing comment ${comment.id}...`);
-          return minimizeComment(octokit, { id: comment.id })
-            .then(() => core.info(`Successfully minimized comment ${comment.id}.`))
-            .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
+          try {
+            await minimizeComment(octokit, { id: comment.id });
+            core.info(`Successfully minimized comment ${comment.id}.`);
+          } catch (error) {
+            core.error(`Failed to minimize comment ${comment.id}: ${error.message}`);
+          }
         });
 
-      return Promise.all(minimizePromises)
-        .then(() => core.info('All minimize operations completed.'))
-        .catch(error => core.error(`Error during minimize operations: ${error.message}`));
-    })
-    .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
+      await Promise.all(minimizePromises);
+      core.info('All minimize operations completed.');
+    } catch (error) {
+      core.error(`Failed to retrieve comments: ${error.message}`);
+    }
   } else {
     core.info('Not a pull request event. Skipping comment minimization.');
   }
@@ -223,7 +268,7 @@ try {
     }
 
     if (createComment){
-        hidePreviousComments();
+        await hidePreviousComments();
     }
 
     if (createComment){
