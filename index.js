@@ -146,29 +146,28 @@ const minimizePreviousComment = (commentId) => {
 };
 
 const findAndMinimizePreviousComment = async () => {
-    if (context.eventName === 'pull_request') {
         try {
             const comments = await octokit.rest.issues.getComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
             });
-            core.info(comments);
+            console.log("all comments: ", comments);
 
             const previousComments = comments.data.filter(comment => {
                 return comment.body.includes('Terraform Plan:');
             });
-            core.info(previousComments);
+            console.log("previous comments: ", previousComments);
 
 
             if (previousComments.length > 0) {
                 const commentToMinimize = previousComments[previousComments.length - 1];
+                console.log("comments to minimize: ", commentToMinimize)
                 minimizePreviousComment(commentToMinimize.id);
             }
         } catch (error) {
             core.error(`Error while finding and minimizing previous comment: ${error.message}`);
         }
-    }
 };
 
 // const findAndMinimizePreviousComment = () => {
