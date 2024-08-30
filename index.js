@@ -145,9 +145,9 @@ const minimizePreviousComment = (commentId) => {
     }
 };
 
-const findAndMinimizePreviousComment = async () => {
+const findAndMinimizePreviousComment = () => {
         try {
-            const comments = await octokit.rest.issues.getComment({
+            const comments = octokit.rest.issues.getComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
