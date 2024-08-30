@@ -32,7 +32,7 @@ jobs:
             test-data/tf_test2.json
             test-data/tf_test3.json
           hide-previous-comments: true
-          comment-footer: "Same as previous but previous comment should be hidden."
+          comment-header: "Same as previous but previous comment should be hidden."
           
 
       - name: Test PR Comment Expand feature
