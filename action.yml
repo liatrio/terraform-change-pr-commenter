@@ -40,6 +40,10 @@ inputs:
     description: Hides privious comments on the PR
     required: false
     default: false
+  show-changed-resources:
+    description: Shows all changed resources from the plan in the actions logs
+    required: false
+    default: "true"
 runs:
   using: node20
   main: dist/index.js

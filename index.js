@@ -13,6 +13,7 @@ const commentFooter = core.getMultilineInput('comment-footer');
 const quietMode = core.getBooleanInput('quiet');
 const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
 const hidePreviousComments = core.getBooleanInput('hide-previous-comments');
+const showChangedResources = core.getBooleanInput("show-changed-resources");
 
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId })
@@ -55,7 +56,10 @@ const output = () => {
         return resource.change.actions != ["no-op"];
       })
 
-      console.log("changed_resources", changed_resources)
+      if (!showChangedResources) {
+        const showChangedResources = core.getBooleanInput("show-changed-resources");
+      }
+
       if (Array.isArray(resource_changes) && resource_changes.length > 0) {
         const resources_to_create = [],
           resources_to_update = [],
