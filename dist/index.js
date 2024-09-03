@@ -12829,6 +12829,7 @@ const commentFooter = core.getMultilineInput('comment-footer');
 const quietMode = core.getBooleanInput('quiet');
 const includeLinkToWorkflow = core.getBooleanInput('include-workflow-link');
 const hidePreviousComments = core.getBooleanInput('hide-previous-comments');
+const logChangedResources = core.getBooleanInput('log-changed-resources');
 
 const workflowLink = includeLinkToWorkflow ? `
 [Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId })
@@ -12871,7 +12872,9 @@ const output = () => {
         return resource.change.actions != ["no-op"];
       })
 
-      console.log("changed_resources", changed_resources)
+      if (logChangedResources) {
+        console.log("changed_resources", changed_resources)
+      }
       if (Array.isArray(resource_changes) && resource_changes.length > 0) {
         const resources_to_create = [],
           resources_to_update = [],
@@ -12906,7 +12909,7 @@ const output = () => {
           }
         }
         // the body must be indented at the start otherwise
-        // there will be formatting error when comment is 
+        // there will be formatting error when comment is
         // showed on GitHub
         body += `
 ${commentHeader}
@@ -13054,6 +13057,7 @@ try {
 } catch (error) {
     core.setFailed(error.message);
 }
+
 })();
 
 module.exports = __webpack_exports__;
