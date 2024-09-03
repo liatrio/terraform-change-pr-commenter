@@ -3,6 +3,10 @@ name: Action Tester Workflow
 on:
   pull_request:
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   plan:
     runs-on: ubuntu-latest
