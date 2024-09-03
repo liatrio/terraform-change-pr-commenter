@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.6.0...v1.7.0) (2024-09-03)
+
+
+### Features
+
+* adds an input for showing the full list of changed resources in the action output ([#68](https://github.com/liatrio/terraform-change-pr-commenter/issues/68)) ([815d669](https://github.com/liatrio/terraform-change-pr-commenter/commit/815d669c00d3bcb18303a846c49ef49cd2ab19db))
+
 # [1.6.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.5.0...v1.6.0) (2024-09-03)
 
 

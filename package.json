@@ -1,6 +1,6 @@
 {
   "name": "terraform-change-pr-commenter",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "GitHub Action to read changes from Terraform plan JSON, summarize changes, and post them in a GitHub Pull Request Comment",
   "main": "index.js",
   "scripts": {
