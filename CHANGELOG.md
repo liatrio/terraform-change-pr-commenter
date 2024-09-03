@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.5.0...v1.6.0) (2024-09-03)
+
+
+### Features
+
+* ability to hide previous comments & fix for summary issue ([#65](https://github.com/liatrio/terraform-change-pr-commenter/issues/65)) ([08ba12c](https://github.com/liatrio/terraform-change-pr-commenter/commit/08ba12cd559192754993f85f0e45de37f095e248))
+
 # [1.5.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.4.5...v1.5.0) (2024-05-08)
 
 
