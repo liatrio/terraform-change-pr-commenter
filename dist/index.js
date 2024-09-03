@@ -13481,8 +13481,8 @@ const output = () => {
         return resource.change.actions != ["no-op"];
       })
 
-      if (!showChangedResources) {
-        const showChangedResources = core.getBooleanInput("show-changed-resources");
+      if (showChangedResources) {
+        console.log("changed_resources", changed_resources)
       }
 
       if (Array.isArray(resource_changes) && resource_changes.length > 0) {
