@@ -87,6 +87,7 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 - Logs all the changed resources found in the plan to the action output.
 
 ## Example usage
+
 Single plan file:
 ```yaml
 uses: liatrio/terraform-change-pr-commenter@v1.4.0
@@ -94,6 +95,7 @@ with:
   json-file: my-tfplan.json
   expand-comment: 'true'
 ```
+
 Multiple plan files:
 ```yaml
 uses: liatrio/terraform-change-pr-commenter@v1.4.0
@@ -102,6 +104,7 @@ with:
     core-infra-tfplan.json
     shared-infra-tfplan.json
 ```
+
 Include plan output to the Actions workflow job summary:
 ```yaml
 uses: liatrio/terraform-change-pr-commenter@v1.4.0
@@ -110,8 +113,10 @@ with:
   expand-comment: 'true'
   include-plan-job-summary: 'true'
 ```
+
 **Note:**
 - When `include-plan-job-summary = true`, if the action is executed in non-Pull Request workflows, the plan output will also be posted to the job summary of that run. If you do not wish to have this behavior, apply conditional logic to your workflow file.
+
 #### Example Job Summary Output
 ![Plan output job summary](assets/plan-output-job-summary.png)
 
