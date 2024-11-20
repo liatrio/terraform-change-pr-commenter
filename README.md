@@ -1,3 +1,6 @@
+# This is a fork from the original liatrio/terraform-change-pr-commenter
+- It contains a small change to trigger the change-pr-commenter with context.eventName="workflow_call"
+
 # Terraform Change Pull Request Commenter Action
 This GitHub Action reads changes from your Terraform plan JSON output, summarizes the changes, and posts them in a single GitHub Pull Request comment.
 
