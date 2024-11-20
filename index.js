@@ -218,7 +218,7 @@ try {
       createComment = false
     }
 
-    if (context.eventName === 'pull_request') {
+    if (context.eventName === 'pull_request' || context.eventName === 'workflow_call') {
       core.info(`Found PR # ${context.issue.number} from workflow context - proceeding to comment.`)
     } else {
       core.info("Action doesn't seem to be running in a PR workflow context.")
