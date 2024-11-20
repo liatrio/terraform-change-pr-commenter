@@ -1,4 +1,4 @@
-name: Terraform Change PR Commenter v2
+name: Terraform Change PR Commenter v2 - forked by Developer2048
 description: Parse changes from Terraform Plan JSON and post them for PR review
 branding:
   icon: "git-pull-request"
