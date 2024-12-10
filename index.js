@@ -158,38 +158,42 @@ const minimizeComment = (variables) => {
 };
 
 const hideComments = () => {
-    core.info(`Hiding previous comments.`);
+  core.info(`Hiding previous comments.`);
 
-    queryComments({
-      owner: context.repo.owner,
-      name: context.repo.repo,
-      number: context.issue.number
+  queryComments({
+    owner: context.repo.owner,
+    name: context.repo.repo,
+    number: context.issue.number
+  })
+    .then(response => {
+      core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
+      const comments = response.repository.pullRequest.comments.nodes;
+
+      core.info(`Found ${comments.length} comments in the PR.`);
+
+      filteredComments = comments.filter(comment =>
+        comment.body.includes('Terraform Plan:') ||
+        comment.body.includes('There were no changes done to the infrastructure.')
+      );
+      
+      filteredComments = filteredComments.filter(comment =>
+        comment.body.includes(commentHeader)
+      );
+
+      core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
+
+      const minimizePromises = filteredComments
+        .filter(comment => !comment.isMinimized)
+        .map(comment => {
+          return minimizeComment({ id: comment.id })
+            .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
+        });
+
+      return Promise.all(minimizePromises)
+        .then(() => core.info('All minimize operations completed.'))
+        .catch(error => core.error(`Error during minimize operations: ${error.message}`));
     })
-      .then(response => {
-        core.info(`Successfully retrieved comments for PR #${context.issue.number}.`);
-        const comments = response.repository.pullRequest.comments.nodes;
-
-        core.info(`Found ${comments.length} comments in the PR.`);
-
-        const filteredComments = comments.filter(comment =>
-          comment.body.includes('Terraform Plan:') ||
-          comment.body.includes('There were no changes done to the infrastructure.')
-        );
-
-        core.info(`Filtered down to ${filteredComments.length} comments that need to be minimized.`);
-
-        const minimizePromises = filteredComments
-          .filter(comment => !comment.isMinimized)
-          .map(comment => {
-            return minimizeComment({ id: comment.id })
-              .catch(error => core.error(`Failed to minimize comment ${comment.id}: ${error.message}`));
-          });
-
-        return Promise.all(minimizePromises)
-          .then(() => core.info('All minimize operations completed.'))
-          .catch(error => core.error(`Error during minimize operations: ${error.message}`));
-      })
-      .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
+    .catch(error => core.error(`Failed to retrieve comments: ${error.message}`));
 };
 
 
