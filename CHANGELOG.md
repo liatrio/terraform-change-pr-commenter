@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.7.0...v1.7.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* `hide-previous-comment` now can handel matrix strategy runs when given a unique `comment-header` ([#78](https://github.com/liatrio/terraform-change-pr-commenter/issues/78)) ([95ca081](https://github.com/liatrio/terraform-change-pr-commenter/commit/95ca081372ca566e0c8577d24353842679b527ee))
+
 # [1.7.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.6.0...v1.7.0) (2024-09-03)
 
 
