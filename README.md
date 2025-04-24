@@ -88,6 +88,13 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 - Logs all the changed resources found in the plan to the action output.
 
 ## Example usage
+
+> ‼️  Do not forget to add pull-requests write permission to your github action definition. [More info](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#defining-access-for-the-github_token-scopes)
+
+```yaml
+permissions:
+  pull-requests: write
+```
 Single plan file:
 ```yaml
 uses: liatrio/terraform-change-pr-commenter@v1.4.0
