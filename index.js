@@ -18,7 +18,7 @@ const logChangedResources = core.getBooleanInput("log-changed-resources");
 
 const workflowLink = includeLinkToWorkflow
   ? `
-[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.id})
 `
   : "";
 
