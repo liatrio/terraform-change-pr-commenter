@@ -7,7 +7,6 @@ const includePlanSummary = core.getBooleanInput("include-plan-job-summary");
 const myToken = core.getInput("github-token");
 const octokit = github.getOctokit(myToken);
 const context = github.context;
-const jobs = context.jobs;
 const inputFilenames = core.getMultilineInput("json-file");
 const commentHeader = core.getMultilineInput("comment-header");
 const commentFooter = core.getMultilineInput("comment-footer");
@@ -17,7 +16,8 @@ const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
 
-console.log("jobs context", jobs);
+// Get current job ID from GitHub environment variable
+const currentJobId = process.env.GITHUB_JOB || '';
 
 const workflowLink = includeLinkToWorkflow
   ? `
@@ -27,7 +27,7 @@ const workflowLink = includeLinkToWorkflow
 
 const jobLink = includeLinkToJob
   ? `
-[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobs.id})
+[Job: ${currentJobId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${currentJobId})
 `
   : "";
 
