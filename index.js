@@ -12,14 +12,56 @@ const commentHeader = core.getMultilineInput("comment-header");
 const commentFooter = core.getMultilineInput("comment-footer");
 const quietMode = core.getBooleanInput("quiet");
 const includeLinkToWorkflow = core.getBooleanInput("include-workflow-link");
+const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
+
+// Get current job name from GitHub environment variable
+const currentJobName = process.env.GITHUB_JOB || '';
+
+// Log the job name for debugging
+console.log('Current job name:', currentJobName);
 
 const workflowLink = includeLinkToWorkflow
   ? `
 [Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
 `
   : "";
+
+// Initialize job link as empty string
+let jobLink = "";
+
+// Function to get job ID from GitHub API
+async function getJobId() {
+  if (includeLinkToJob) {
+    try {
+      // Get all jobs for the current workflow run
+      const response = await octokit.rest.actions.listJobsForWorkflowRun({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        run_id: context.runId
+      });
+      
+      // Find the current job by name
+      const job = response.data.jobs.find(job => job.name === currentJobName);
+      
+      if (job) {
+        console.log(`Found job ID: ${job.id} for job name: ${currentJobName}`);
+        // Create job link with the numeric job ID
+        return `
+[Job: ${currentJobName}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${job.id})
+`;
+      } else {
+        console.log(`Could not find job with name: ${currentJobName}`);
+        return "";
+      }
+    } catch (error) {
+      console.error(`Error fetching job ID: ${error.message}`);
+      return "";
+    }
+  }
+  return "";
+}
 
 var hasNoChanges = false;
 
@@ -110,6 +152,7 @@ ${details("replace", resources_to_replace, "+")}
 </details>
 ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
 ${workflowLink}
+${jobLink}
 `;
         if (
           resources_to_create +
@@ -228,57 +271,69 @@ const hideComments = () => {
     );
 };
 
-try {
-  let rawOutput = output();
-  let createComment = true;
+// Main execution wrapped in an async function to allow for await
+async function run() {
+  try {
+    // Get job link if needed
+    if (includeLinkToJob) {
+      jobLink = await getJobId();
+      console.log("Job link generated:", jobLink);
+    }
+    
+    let rawOutput = output();
+    let createComment = true;
 
-  console.log("hidePreviousComments", hidePreviousComments);
-  console.log(
-    "hidePreviousComments && context.eventName === pull_request",
-    hidePreviousComments && context.eventName === "pull_request",
-  );
-  if (hidePreviousComments && context.eventName === "pull_request") {
-    hideComments();
-  }
-
-  console.log("includePlanSummary", includePlanSummary);
-  if (includePlanSummary) {
-    core.info("Adding plan output to job summary");
-    core.summary.addHeading("Terraform Plan Results").addRaw(rawOutput).write();
-  }
-
-  console.log("quietMode", quietMode);
-  console.log("hasNoChanges", hasNoChanges);
-  console.log("quietMode && hasNoChanges", quietMode && hasNoChanges);
-  if (quietMode && hasNoChanges) {
-    core.info(
-      "quiet mode is enabled and there are no changes to the infrastructure.",
+    console.log("hidePreviousComments", hidePreviousComments);
+    console.log(
+      "hidePreviousComments && context.eventName === pull_request",
+      hidePreviousComments && context.eventName === "pull_request",
     );
-    core.info("Skipping comment creation.");
-    createComment = false;
-  }
+    if (hidePreviousComments && context.eventName === "pull_request") {
+      hideComments();
+    }
 
-  if (context.eventName === "pull_request") {
-    core.info(
-      `Found PR # ${context.issue.number} from workflow context - proceeding to comment.`,
-    );
-  } else {
-    core.info("Action doesn't seem to be running in a PR workflow context.");
-    core.info("Skipping comment creation.");
-    createComment = false;
-  }
+    console.log("includePlanSummary", includePlanSummary);
+    if (includePlanSummary) {
+      core.info("Adding plan output to job summary");
+      core.summary.addHeading("Terraform Plan Results").addRaw(rawOutput).write();
+    }
 
-  if (createComment) {
-    core.info("Adding comment to PR");
-    core.info(`Comment: ${rawOutput}`);
-    octokit.rest.issues.createComment({
-      issue_number: context.issue.number,
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      body: rawOutput,
-    });
-    core.info("Comment added successfully.");
+    console.log("quietMode", quietMode);
+    console.log("hasNoChanges", hasNoChanges);
+    console.log("quietMode && hasNoChanges", quietMode && hasNoChanges);
+    if (quietMode && hasNoChanges) {
+      core.info(
+        "quiet mode is enabled and there are no changes to the infrastructure.",
+      );
+      core.info("Skipping comment creation.");
+      createComment = false;
+    }
+
+    if (context.eventName === "pull_request") {
+      core.info(
+        `Found PR # ${context.issue.number} from workflow context - proceeding to comment.`,
+      );
+    } else {
+      core.info("Action doesn't seem to be running in a PR workflow context.");
+      core.info("Skipping comment creation.");
+      createComment = false;
+    }
+
+    if (createComment) {
+      core.info("Adding comment to PR");
+      core.info(`Comment: ${rawOutput}`);
+      octokit.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: rawOutput,
+      });
+      core.info("Comment added successfully.");
+    }
+  } catch (error) {
+    core.setFailed(error.message);
   }
-} catch (error) {
-  core.setFailed(error.message);
 }
+
+// Execute the main function
+run();
