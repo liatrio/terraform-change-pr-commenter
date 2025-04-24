@@ -16,9 +16,11 @@ const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
 
+console.log("context", context);
+
 const workflowLink = includeLinkToWorkflow
   ? `
-[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.id})
+[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.jobs.id})
 `
   : "";
 
