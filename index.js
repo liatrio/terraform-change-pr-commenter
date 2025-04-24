@@ -16,8 +16,11 @@ const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
 
-// Get current job ID from GitHub environment variable
-const currentJobId = process.env.GITHUB_JOB || '';
+// Get current job name from GitHub environment variable
+const currentJobName = process.env.GITHUB_JOB || '';
+
+// Log the job name for debugging
+console.log('Current job name:', currentJobName);
 
 const workflowLink = includeLinkToWorkflow
   ? `
@@ -27,7 +30,7 @@ const workflowLink = includeLinkToWorkflow
 
 const jobLink = includeLinkToJob
   ? `
-[Job: ${currentJobId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${currentJobId})
+[Job: ${currentJobName}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${currentJobName})
 `
   : "";
 
