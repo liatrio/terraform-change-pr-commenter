@@ -24,7 +24,7 @@ const workflowLink = includeLinkToWorkflow
 
 const jobLink = includeLinkToJob
   ? `
-[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${context.job})
+[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.id})
 `
   : "";
 
