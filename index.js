@@ -7,6 +7,7 @@ const includePlanSummary = core.getBooleanInput("include-plan-job-summary");
 const myToken = core.getInput("github-token");
 const octokit = github.getOctokit(myToken);
 const context = github.context;
+const jobs = context.jobs;
 const inputFilenames = core.getMultilineInput("json-file");
 const commentHeader = core.getMultilineInput("comment-header");
 const commentFooter = core.getMultilineInput("comment-footer");
@@ -20,13 +21,13 @@ console.log("context", context);
 
 const workflowLink = includeLinkToWorkflow
   ? `
-[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.jobs.id})
+[Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
 `
   : "";
 
 const jobLink = includeLinkToJob
   ? `
-[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.id})
+[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobs.id})
 `
   : "";
 
