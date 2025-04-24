@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.8.0...v1.9.0) (2025-04-24)
+
+
+### Features
+
+* Add GitHub Actions to CodeQL analysis matrix ([#86](https://github.com/liatrio/terraform-change-pr-commenter/issues/86)) ([d410b01](https://github.com/liatrio/terraform-change-pr-commenter/commit/d410b015e84293a722b73dd529393aeaf2b2cacf))
+
 # [1.8.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.7.1...v1.8.0) (2025-04-24)
 
 
