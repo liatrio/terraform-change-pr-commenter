@@ -17,7 +17,7 @@ const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
 
-console.log("context", context);
+console.log("jobs context", jobs);
 
 const workflowLink = includeLinkToWorkflow
   ? `
