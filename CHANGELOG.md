@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.7.1...v1.8.0) (2025-04-24)
+
+
+### Features
+
+* Add job link option, resolves [#84](https://github.com/liatrio/terraform-change-pr-commenter/issues/84) ([#85](https://github.com/liatrio/terraform-change-pr-commenter/issues/85)) ([0b450ba](https://github.com/liatrio/terraform-change-pr-commenter/commit/0b450ba53b357f81b54bf117c9dab15e2fd6cda8))
+
 ## [1.7.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.7.0...v1.7.1) (2024-12-12)
 
 
