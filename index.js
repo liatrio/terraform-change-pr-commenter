@@ -12,12 +12,19 @@ const commentHeader = core.getMultilineInput("comment-header");
 const commentFooter = core.getMultilineInput("comment-footer");
 const quietMode = core.getBooleanInput("quiet");
 const includeLinkToWorkflow = core.getBooleanInput("include-workflow-link");
+const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
 
 const workflowLink = includeLinkToWorkflow
   ? `
 [Workflow: ${context.workflow}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+`
+  : "";
+
+const jobLink = includeLinkToJob
+  ? `
+[Job: ${context.job}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${context.job})
 `
   : "";
 
@@ -110,6 +117,7 @@ ${details("replace", resources_to_replace, "+")}
 </details>
 ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
 ${workflowLink}
+${jobLink}
 `;
         if (
           resources_to_create +
