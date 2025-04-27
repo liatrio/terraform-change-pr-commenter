@@ -1,0 +1,1146 @@
+{
+  "format_version": "1.1",
+  "terraform_version": "1.2.9",
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_iam_policy.changed",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "changed",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:iam::123456789012:policy/test-policy-change",
+            "description": "",
+            "id": "arn:aws:iam::123456789012:policy/test-policy-change",
+            "name": "test-policy-change",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPAR2DEMO",
+            "tags": {},
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI3"
+            }
+          },
+          "sensitive_values": {
+            "tags": {},
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "aws_iam_policy.created",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "created",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "description": null,
+            "name": "test-policy-created",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "tags": null,
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI3"
+            }
+          },
+          "sensitive_values": {
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "aws_iam_policy.tag_and_change",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tag_and_change",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+            "description": "",
+            "id": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+            "name": "test-policy-tag-and-change",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPAR2NUVQKSU5XSSXLPG",
+            "tags": {},
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI3"
+            }
+          },
+          "sensitive_values": {
+            "tags": {},
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "aws_iam_policy.tag_only",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tag_only",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+            "description": "",
+            "id": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+            "name": "test-policy-tag-only",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPAR2NUVQKSYF3ZBGWIM",
+            "tags": {
+              "SourceVersion": "27NwiYBI6"
+            },
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI6"
+            }
+          },
+          "sensitive_values": {
+            "tags": {},
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "aws_iam_policy.tainted",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tainted",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "description": null,
+            "name": "test-policy-tainted",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "tags": null,
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI3"
+            }
+          },
+          "sensitive_values": {
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "aws_iam_policy.unchanged",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "unchanged",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+            "description": "",
+            "id": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+            "name": "test-policy-unchanged",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPAR2NUVQKSU2IBZAFHO",
+            "tags": {},
+            "tags_all": {
+              "Source": "demo-aws-test",
+              "SourceVersion": "27NwiYBI3"
+            }
+          },
+          "sensitive_values": {
+            "tags": {},
+            "tags_all": {}
+          }
+        },
+        {
+          "address": "random_string.version",
+          "mode": "managed",
+          "type": "random_string",
+          "name": "version",
+          "provider_name": "registry.terraform.io/hashicorp/random",
+          "schema_version": 2,
+          "values": {
+            "id": "27NwiYBI",
+            "keepers": null,
+            "length": 8,
+            "lower": true,
+            "min_lower": 0,
+            "min_numeric": 0,
+            "min_special": 0,
+            "min_upper": 0,
+            "number": true,
+            "numeric": true,
+            "override_special": null,
+            "result": "27NwiYBI",
+            "special": false,
+            "upper": true
+          },
+          "sensitive_values": {}
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_iam_policy.changed",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "changed",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "update"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-change",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-change",
+          "name": "test-policy-change",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2DEMO",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-change",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-change",
+          "name": "test-policy-change",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2DEMO",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after_unknown": {},
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      }
+    },
+    {
+      "address": "aws_iam_policy.created",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "created",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "description": null,
+          "name": "test-policy-created",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "tags": null,
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after_unknown": {
+          "arn": true,
+          "id": true,
+          "name_prefix": true,
+          "policy_id": true,
+          "tags_all": {}
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "tags_all": {}
+        }
+      }
+    },
+    {
+      "address": "aws_iam_policy.destroyed",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "destroyed",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "delete"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-destroyed",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-destroyed",
+          "name": "test-policy-destroyed",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "DEMOLIIFZ3",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after": null,
+        "after_unknown": {},
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": false
+      },
+      "action_reason": "delete_because_no_resource_config"
+    },
+    {
+      "address": "aws_iam_policy.tag_and_change",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "tag_and_change",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "update"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+          "name": "test-policy-tag-and-change",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSU5XSSXLPG",
+          "tags": {
+            "SourceVersion": "27NwiYBI6"
+          },
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI6"
+          }
+        },
+        "after": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+          "name": "test-policy-tag-and-change",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSU5XSSXLPG",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after_unknown": {},
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      }
+    },
+    {
+      "address": "aws_iam_policy.tag_only",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "tag_only",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "update"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+          "name": "test-policy-tag-only",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSYF3ZBGWIM",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+          "name": "test-policy-tag-only",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSYF3ZBGWIM",
+          "tags": {
+            "SourceVersion": "27NwiYBI6"
+          },
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI6"
+          }
+        },
+        "after_unknown": {},
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      }
+    },
+    {
+      "address": "aws_iam_policy.tainted",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "tainted",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "delete",
+          "create"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-tainted",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-tainted",
+          "name": "test-policy-tainted",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSV46NWXCIW",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after": {
+          "description": null,
+          "name": "test-policy-tainted",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "tags": null,
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after_unknown": {
+          "arn": true,
+          "id": true,
+          "name_prefix": true,
+          "policy_id": true,
+          "tags_all": {}
+        },
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": {
+          "tags_all": {}
+        }
+      },
+      "action_reason": "replace_because_tainted"
+    },
+    {
+      "address": "aws_iam_policy.unchanged",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "unchanged",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+          "name": "test-policy-unchanged",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSU2IBZAFHO",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after": {
+          "arn": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+          "description": "",
+          "id": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+          "name": "test-policy-unchanged",
+          "name_prefix": "",
+          "path": "/",
+          "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+          "policy_id": "ANPAR2NUVQKSU2IBZAFHO",
+          "tags": {},
+          "tags_all": {
+            "Source": "demo-aws-test",
+            "SourceVersion": "27NwiYBI3"
+          }
+        },
+        "after_unknown": {},
+        "before_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        },
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      }
+    },
+    {
+      "address": "random_string.version",
+      "mode": "managed",
+      "type": "random_string",
+      "name": "version",
+      "provider_name": "registry.terraform.io/hashicorp/random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "id": "27NwiYBI",
+          "keepers": null,
+          "length": 8,
+          "lower": true,
+          "min_lower": 0,
+          "min_numeric": 0,
+          "min_special": 0,
+          "min_upper": 0,
+          "number": true,
+          "numeric": true,
+          "override_special": null,
+          "result": "27NwiYBI",
+          "special": false,
+          "upper": true
+        },
+        "after": {
+          "id": "27NwiYBI",
+          "keepers": null,
+          "length": 8,
+          "lower": true,
+          "min_lower": 0,
+          "min_numeric": 0,
+          "min_special": 0,
+          "min_upper": 0,
+          "number": true,
+          "numeric": true,
+          "override_special": null,
+          "result": "27NwiYBI",
+          "special": false,
+          "upper": true
+        },
+        "after_unknown": {},
+        "before_sensitive": {},
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "prior_state": {
+    "format_version": "1.0",
+    "terraform_version": "1.2.9",
+    "values": {
+      "root_module": {
+        "resources": [
+          {
+            "address": "aws_iam_policy.changed",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "changed",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-change",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-change",
+              "name": "test-policy-change",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "ANPAR2DEMO",
+              "tags": {},
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI3"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.change",
+              "random_string.version"
+            ]
+          },
+          {
+            "address": "aws_iam_policy.destroyed",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "destroyed",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-destroyed",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-destroyed",
+              "name": "test-policy-destroyed",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "DEMOLIIFZ3",
+              "tags": {},
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI3"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.unchanged",
+              "random_string.version"
+            ]
+          },
+          {
+            "address": "aws_iam_policy.tag_and_change",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "tag_and_change",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-tag-and-change",
+              "name": "test-policy-tag-and-change",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "ANPAR2NUVQKSU5XSSXLPG",
+              "tags": {
+                "SourceVersion": "27NwiYBI6"
+              },
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI6"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.change",
+              "random_string.version"
+            ]
+          },
+          {
+            "address": "aws_iam_policy.tag_only",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "tag_only",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-tag-only",
+              "name": "test-policy-tag-only",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "ANPAR2NUVQKSYF3ZBGWIM",
+              "tags": {},
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI3"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.unchanged",
+              "random_string.version"
+            ]
+          },
+          {
+            "address": "aws_iam_policy.tainted",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "tainted",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-tainted",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-tainted",
+              "name": "test-policy-tainted",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "ANPAR2NUVQKSV46NWXCIW",
+              "tags": {},
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI3"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.unchanged",
+              "random_string.version"
+            ],
+            "tainted": true
+          },
+          {
+            "address": "aws_iam_policy.unchanged",
+            "mode": "managed",
+            "type": "aws_iam_policy",
+            "name": "unchanged",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "arn": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+              "description": "",
+              "id": "arn:aws:iam::123456789012:policy/test-policy-unchanged",
+              "name": "test-policy-unchanged",
+              "name_prefix": "",
+              "path": "/",
+              "policy": "{\"Statement\":[{\"Action\":\"s3:Get*\",\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"testdoc\"}],\"Version\":\"2012-10-17\"}",
+              "policy_id": "ANPAR2NUVQKSU2IBZAFHO",
+              "tags": {},
+              "tags_all": {
+                "Source": "demo-aws-test",
+                "SourceVersion": "27NwiYBI3"
+              }
+            },
+            "sensitive_values": {
+              "tags": {},
+              "tags_all": {}
+            },
+            "depends_on": [
+              "data.aws_iam_policy_document.unchanged",
+              "random_string.version"
+            ]
+          },
+          {
+            "address": "data.aws_iam_policy_document.change",
+            "mode": "data",
+            "type": "aws_iam_policy_document",
+            "name": "change",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "id": "1388270941",
+              "json": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"testdoc\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+              "override_json": null,
+              "override_policy_documents": null,
+              "policy_id": null,
+              "source_json": null,
+              "source_policy_documents": null,
+              "statement": [
+                {
+                  "actions": [
+                    "s3:*"
+                  ],
+                  "condition": [],
+                  "effect": "Allow",
+                  "not_actions": [],
+                  "not_principals": [],
+                  "not_resources": [],
+                  "principals": [],
+                  "resources": [
+                    "*"
+                  ],
+                  "sid": "testdoc"
+                }
+              ],
+              "version": "2012-10-17"
+            },
+            "sensitive_values": {
+              "statement": [
+                {
+                  "actions": [
+                    false
+                  ],
+                  "condition": [],
+                  "not_actions": [],
+                  "not_principals": [],
+                  "not_resources": [],
+                  "principals": [],
+                  "resources": [
+                    false
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "address": "data.aws_iam_policy_document.unchanged",
+            "mode": "data",
+            "type": "aws_iam_policy_document",
+            "name": "unchanged",
+            "provider_name": "registry.terraform.io/hashicorp/aws",
+            "schema_version": 0,
+            "values": {
+              "id": "1270208521",
+              "json": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"testdoc\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:Get*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+              "override_json": null,
+              "override_policy_documents": null,
+              "policy_id": null,
+              "source_json": null,
+              "source_policy_documents": null,
+              "statement": [
+                {
+                  "actions": [
+                    "s3:Get*"
+                  ],
+                  "condition": [],
+                  "effect": "Allow",
+                  "not_actions": [],
+                  "not_principals": [],
+                  "not_resources": [],
+                  "principals": [],
+                  "resources": [
+                    "*"
+                  ],
+                  "sid": "testdoc"
+                }
+              ],
+              "version": "2012-10-17"
+            },
+            "sensitive_values": {
+              "statement": [
+                {
+                  "actions": [
+                    false
+                  ],
+                  "condition": [],
+                  "not_actions": [],
+                  "not_principals": [],
+                  "not_resources": [],
+                  "principals": [],
+                  "resources": [
+                    false
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "address": "random_string.version",
+            "mode": "managed",
+            "type": "random_string",
+            "name": "version",
+            "provider_name": "registry.terraform.io/hashicorp/random",
+            "schema_version": 2,
+            "values": {
+              "id": "27NwiYBI",
+              "keepers": null,
+              "length": 8,
+              "lower": true,
+              "min_lower": 0,
+              "min_numeric": 0,
+              "min_special": 0,
+              "min_upper": 0,
+              "number": true,
+              "numeric": true,
+              "override_special": null,
+              "result": "27NwiYBI",
+              "special": false,
+              "upper": true
+            },
+            "sensitive_values": {}
+          }
+        ]
+      }
+    }
+  },
+  "configuration": {
+    "provider_config": {
+      "aws": {
+        "name": "aws",
+        "full_name": "registry.terraform.io/hashicorp/aws",
+        "version_constraint": "~\u003e 4.0",
+        "expressions": {
+          "default_tags": [
+            {
+              "tags": {
+                "references": [
+                  "random_string.version.result",
+                  "random_string.version"
+                ]
+              }
+            }
+          ],
+          "region": {
+            "constant_value": "us-west-2"
+          }
+        }
+      },
+      "random": {
+        "name": "random",
+        "full_name": "registry.terraform.io/hashicorp/random"
+      }
+    },
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_iam_policy.changed",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "changed",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-change"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.change.json",
+                "data.aws_iam_policy_document.change"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_policy.created",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "created",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-created"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.unchanged.json",
+                "data.aws_iam_policy_document.unchanged"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_policy.tag_and_change",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tag_and_change",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-tag-and-change"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.change.json",
+                "data.aws_iam_policy_document.change"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_policy.tag_only",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tag_only",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-tag-only"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.unchanged.json",
+                "data.aws_iam_policy_document.unchanged"
+              ]
+            },
+            "tags": {
+              "references": [
+                "random_string.version.result",
+                "random_string.version"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_policy.tainted",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "tainted",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-tainted"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.unchanged.json",
+                "data.aws_iam_policy_document.unchanged"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_policy.unchanged",
+          "mode": "managed",
+          "type": "aws_iam_policy",
+          "name": "unchanged",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": {
+              "constant_value": "test-policy-unchanged"
+            },
+            "policy": {
+              "references": [
+                "data.aws_iam_policy_document.unchanged.json",
+                "data.aws_iam_policy_document.unchanged"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "random_string.version",
+          "mode": "managed",
+          "type": "random_string",
+          "name": "version",
+          "provider_config_key": "random",
+          "expressions": {
+            "length": {
+              "constant_value": 8
+            },
+            "special": {
+              "constant_value": false
+            }
+          },
+          "schema_version": 2
+        },
+        {
+          "address": "data.aws_iam_policy_document.change",
+          "mode": "data",
+          "type": "aws_iam_policy_document",
+          "name": "change",
+          "provider_config_key": "aws",
+          "expressions": {
+            "statement": [
+              {
+                "actions": {
+                  "constant_value": [
+                    "s3:*"
+                  ]
+                },
+                "effect": {
+                  "constant_value": "Allow"
+                },
+                "resources": {
+                  "constant_value": [
+                    "*"
+                  ]
+                },
+                "sid": {
+                  "constant_value": "testdoc"
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "data.aws_iam_policy_document.unchanged",
+          "mode": "data",
+          "type": "aws_iam_policy_document",
+          "name": "unchanged",
+          "provider_config_key": "aws",
+          "expressions": {
+            "statement": [
+              {
+                "actions": {
+                  "constant_value": [
+                    "s3:Get*"
+                  ]
+                },
+                "effect": {
+                  "constant_value": "Allow"
+                },
+                "resources": {
+                  "constant_value": [
+                    "*"
+                  ]
+                },
+                "sid": {
+                  "constant_value": "testdoc"
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        }
+      ]
+    }
+  },
+  "relevant_attributes": [
+    {
+      "resource": "data.aws_iam_policy_document.change",
+      "attribute": [
+        "json"
+      ]
+    },
+    {
+      "resource": "data.aws_iam_policy_document.unchanged",
+      "attribute": [
+        "json"
+      ]
+    },
+    {
+      "resource": "random_string.version",
+      "attribute": [
+        "result"
+      ]
+    }
+  ]
+}
