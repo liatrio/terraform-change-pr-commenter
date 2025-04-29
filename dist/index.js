@@ -12831,9 +12831,13 @@ const includeLinkToWorkflow = core.getBooleanInput("include-workflow-link");
 const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
+const includeTagOnlyResources = core.getBooleanInput("include-tag-only-resources");
+const includeUnchangedResources = core.getBooleanInput("include-unchanged-resources");
+
 
 // Get current job name from GitHub environment variable
 const currentJobName = process.env.GITHUB_JOB || '';
+const currentRunnerName = process.env.RUNNER_NAME || '';
 
 // Log the job name for debugging
 console.log('Current job name:', currentJobName);
@@ -12855,20 +12859,24 @@ async function getJobId() {
       const response = await octokit.rest.actions.listJobsForWorkflowRun({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        run_id: context.runId
+        run_id: context.runId,
       });
       
       // Find the current job by name
-      const job = response.data.jobs.find(job => job.name === currentJobName);
+      const job = response.data.jobs.find(job => 
+        job.runner_name === currentRunnerName &&
+        (job.name.endsWith(currentJobName) || job.name.startsWith(currentJobName))
+      );
       
       if (job) {
-        console.log(`Found job ID: ${job.id} for job name: ${currentJobName}`);
+        console.log(`Found job ID: ${job.id} for job name: ${job.name}`);
         // Create job link with the numeric job ID
         return `
-[Job: ${currentJobName}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${job.id})
+[Job: ${job.name}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${job.id})
 `;
       } else {
         console.log(`Could not find job with name: ${currentJobName}`);
+        console.log(`Jobs: \n${JSON.stringify(response.data.jobs, null, 2)}`);
         return "";
       }
     } catch (error) {
@@ -12924,7 +12932,24 @@ const output = () => {
           resources_to_update = [],
           resources_to_delete = [],
           resources_to_replace = [],
+          resources_to_tag = [],
           resources_unchanged = [];
+
+        // Deep comparison function to check if objects are identical after removing tags
+        const isTagOnlyChange = (before, after) => {
+          if (includeTagOnlyResources == false) {
+            return false;
+          }
+          const beforeCopy = JSON.parse(JSON.stringify(before || {}));
+          const afterCopy = JSON.parse(JSON.stringify(after || {}));
+
+          delete beforeCopy.tags;
+          delete beforeCopy.tags_all;
+          delete afterCopy.tags;
+          delete afterCopy.tags_all;
+
+          return JSON.stringify(beforeCopy) === JSON.stringify(afterCopy);
+        };
 
         // for each resource changes
         for (const resource of resource_changes) {
@@ -12948,7 +12973,11 @@ const output = () => {
               }
               break;
             case "update":
-              resources_to_update.push(address);
+              if (isTagOnlyChange(change.before, change.after)) {
+                resources_to_tag.push(address);
+              } else {
+                resources_to_update.push(address);
+              }
               break;
           }
         }
@@ -12959,11 +12988,13 @@ const output = () => {
 ${commentHeader}
 <details ${expandDetailsComment ? "open" : ""}>
 <summary>
-<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
+<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ''}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
 </summary>
+${includeUnchangedResources ? details("unchanged", resources_unchanged, "•") : ""}
 ${details("create", resources_to_create, "+")}
 ${details("delete", resources_to_delete, "-")}
 ${details("update", resources_to_update, "!")}
+${includeTagOnlyResources ? details("tag", resources_to_tag, "!") : ""}
 ${details("replace", resources_to_replace, "+")}
 </details>
 ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
@@ -12974,6 +13005,7 @@ ${jobLink}
           resources_to_create +
             resources_to_delete +
             resources_to_update +
+            resources_to_tag +
             resources_to_replace ==
           []
         ) {
@@ -12999,11 +13031,17 @@ ${jobLink}
 };
 
 const details = (action, resources, operator) => {
+  let str_title = "";
   let str = "";
 
   if (resources.length !== 0) {
+    if (action === "unchanged") {
+      str_title = "Unchanged resources";
+    } else {
+      str_title = `Resources to ${action}`;
+    }
     str = `
-#### Resources to ${action}\n
+#### ${str_title}\n
 \`\`\`diff\n
 `;
     for (const el of resources) {

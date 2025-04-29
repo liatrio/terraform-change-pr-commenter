@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.9.0...v1.10.0) (2025-04-29)
+
+
+### Features
+
+* Add tags tracking, unchanged resources, and matrix support for jobs ([#87](https://github.com/liatrio/terraform-change-pr-commenter/issues/87)) ([b2f5356](https://github.com/liatrio/terraform-change-pr-commenter/commit/b2f535616c169467e523e6ff35ba684606ee2521))
+
 # [1.9.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.8.0...v1.9.0) (2025-04-24)
 
 
