@@ -48,6 +48,14 @@ inputs:
     description: Log the changed resources in action output
     required: false
     default: "true"
+  include-tag-only-resources:
+    description: If true, include resources with only tag changes as a separate section
+    required: false
+    default: "false"
+  include-unchanged-resources:
+    description: If true, include unchanged resources in the output
+    required: false
+    default: "false"
 runs:
   using: node20
   main: dist/index.js

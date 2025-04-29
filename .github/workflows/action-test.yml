@@ -49,3 +49,31 @@ jobs:
         uses: ./
         with:
           json-file: test-data/tf_nochanges.json
+    
+  matrix-plan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        json:
+          - tf_test4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: yarn install
+      - run: yarn run build
+
+      - name: Test PR Commenter with matrix job
+        uses: ./
+        with:
+          json-file: test-data/${{ matrix.json }}.json
+          comment-header: Plan Summary for ${{ github.job }} (${{ matrix.json }})
+          quiet: true
+          expand-comment: true
+          hide-previous-comments: true
+          include-workflow-link: true
+          include-job-link: true
+          include-plan-job-summary: true
+          include-tag-only-resources: true
+          include-unchanged-resources: true
