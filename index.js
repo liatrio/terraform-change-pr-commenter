@@ -102,7 +102,7 @@ const output = () => {
   let body = "";
   // for each file
   for (const file of inputFilenames) {
-    const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes;
+    const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes || [];
     try {
       let changed_resources = resource_changes.filter((resource) => {
         return resource.change.actions != ["no-op"];
