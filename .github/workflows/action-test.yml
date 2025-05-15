@@ -31,7 +31,6 @@ jobs:
             test-data/tf_test3.json
           hide-previous-comments: true
           comment-header: "Same as previous but previous comment should be hidden."
-          
 
       - name: Test PR Comment Expand feature
         uses: ./
@@ -49,7 +48,12 @@ jobs:
         uses: ./
         with:
           json-file: test-data/tf_nochanges.json
-    
+
+      - name: Test PR Commenter with no resources
+        uses: ./
+        with:
+          json-file: test-data/tf_noresources.json
+
   matrix-plan:
     runs-on: ubuntu-latest
     strategy:
