@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.10.0...v1.10.1) (2025-05-30)
+
+
+### Bug Fixes
+
+* handle comment if no resources ([#88](https://github.com/liatrio/terraform-change-pr-commenter/issues/88)) ([4666dab](https://github.com/liatrio/terraform-change-pr-commenter/commit/4666dabe39891932028ca1b53a2172590009bad5))
+
 # [1.10.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.9.0...v1.10.0) (2025-04-29)
 
 
