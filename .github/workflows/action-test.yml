@@ -10,6 +10,10 @@ on:
         type: string
         default: 'reusable'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   plan:
     runs-on: ubuntu-latest
