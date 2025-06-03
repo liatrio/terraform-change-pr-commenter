@@ -2,6 +2,13 @@ name: Action Tester Workflow
 
 on:
   pull_request:
+  workflow_call:
+    inputs:
+      test-mode:
+        description: 'Test mode for workflow_call testing'
+        required: false
+        type: string
+        default: 'reusable'
 
 jobs:
   plan:
@@ -81,3 +88,10 @@ jobs:
           include-plan-job-summary: true
           include-tag-only-resources: true
           include-unchanged-resources: true
+
+  # Test workflow_call functionality by calling a reusable workflow
+  test-reusable-workflow:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/reusable-terraform-test.yml
+    with:
+      test-mode: 'workflow_call_test'
