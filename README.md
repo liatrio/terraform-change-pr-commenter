@@ -97,14 +97,14 @@ permissions:
 ```
 Single plan file:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.4.0
+uses: liatrio/terraform-change-pr-commenter@v1.10.0
 with:
   json-file: my-tfplan.json
   expand-comment: 'true'
 ```
 Multiple plan files:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.4.0
+uses: liatrio/terraform-change-pr-commenter@v1.10.0
 with:
   json-file: |
     core-infra-tfplan.json
@@ -112,7 +112,7 @@ with:
 ```
 Include plan output to the Actions workflow job summary:
 ```yaml
-uses: liatrio/terraform-change-pr-commenter@v1.4.0
+uses: liatrio/terraform-change-pr-commenter@v1.10.0
 with:
   json-file: my-tfplan.json
   expand-comment: 'true'
@@ -141,7 +141,7 @@ To use this action with OpenTofu you need to initialize OpenTofu without the wra
     run: tofu show -json ./.planfile >> ./my-planfile.json
 
   - name: Create PR comment
-    uses: liatrio/terraform-change-pr-commenter@v1.4.0
+    uses: liatrio/terraform-change-pr-commenter@v1.10.0
     with:
       json-file: my-planfile.json
 ```
