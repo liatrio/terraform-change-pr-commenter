@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.10.1...v1.11.0) (2025-06-16)
+
+
+### Features
+
+* allow workflow calls as triggers ([#89](https://github.com/liatrio/terraform-change-pr-commenter/issues/89)) ([bd5d6aa](https://github.com/liatrio/terraform-change-pr-commenter/commit/bd5d6aafb8c90a8cc0e3d78c32a0f33fcffa27de))
+
 ## [1.10.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.10.0...v1.10.1) (2025-05-30)
 
 

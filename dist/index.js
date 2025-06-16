@@ -12831,16 +12831,19 @@ const includeLinkToWorkflow = core.getBooleanInput("include-workflow-link");
 const includeLinkToJob = core.getBooleanInput("include-job-link");
 const hidePreviousComments = core.getBooleanInput("hide-previous-comments");
 const logChangedResources = core.getBooleanInput("log-changed-resources");
-const includeTagOnlyResources = core.getBooleanInput("include-tag-only-resources");
-const includeUnchangedResources = core.getBooleanInput("include-unchanged-resources");
-
+const includeTagOnlyResources = core.getBooleanInput(
+  "include-tag-only-resources",
+);
+const includeUnchangedResources = core.getBooleanInput(
+  "include-unchanged-resources",
+);
 
 // Get current job name from GitHub environment variable
-const currentJobName = process.env.GITHUB_JOB || '';
-const currentRunnerName = process.env.RUNNER_NAME || '';
+const currentJobName = process.env.GITHUB_JOB || "";
+const currentRunnerName = process.env.RUNNER_NAME || "";
 
 // Log the job name for debugging
-console.log('Current job name:', currentJobName);
+console.log("Current job name:", currentJobName);
 
 const workflowLink = includeLinkToWorkflow
   ? `
@@ -12861,13 +12864,15 @@ async function getJobId() {
         repo: context.repo.repo,
         run_id: context.runId,
       });
-      
+
       // Find the current job by name
-      const job = response.data.jobs.find(job => 
-        job.runner_name === currentRunnerName &&
-        (job.name.endsWith(currentJobName) || job.name.startsWith(currentJobName))
+      const job = response.data.jobs.find(
+        (job) =>
+          job.runner_name === currentRunnerName &&
+          (job.name.endsWith(currentJobName) ||
+            job.name.startsWith(currentJobName)),
       );
-      
+
       if (job) {
         console.log(`Found job ID: ${job.id} for job name: ${job.name}`);
         // Create job link with the numeric job ID
@@ -12918,7 +12923,8 @@ const output = () => {
   let body = "";
   // for each file
   for (const file of inputFilenames) {
-    const resource_changes = JSON.parse(fs.readFileSync(file)).resource_changes || [];
+    const resource_changes =
+      JSON.parse(fs.readFileSync(file)).resource_changes || [];
     try {
       let changed_resources = resource_changes.filter((resource) => {
         return resource.change.actions != ["no-op"];
@@ -12988,7 +12994,7 @@ const output = () => {
 ${commentHeader}
 <details ${expandDetailsComment ? "open" : ""}>
 <summary>
-<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ''}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
+<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ""}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
 </summary>
 ${includeUnchangedResources ? details("unchanged", resources_unchanged, "•") : ""}
 ${details("create", resources_to_create, "+")}
@@ -13133,7 +13139,7 @@ async function run() {
       jobLink = await getJobId();
       console.log("Job link generated:", jobLink);
     }
-    
+
     let rawOutput = output();
     let createComment = true;
 
@@ -13149,7 +13155,10 @@ async function run() {
     console.log("includePlanSummary", includePlanSummary);
     if (includePlanSummary) {
       core.info("Adding plan output to job summary");
-      core.summary.addHeading("Terraform Plan Results").addRaw(rawOutput).write();
+      core.summary
+        .addHeading("Terraform Plan Results")
+        .addRaw(rawOutput)
+        .write();
     }
 
     console.log("quietMode", quietMode);
@@ -13163,10 +13172,22 @@ async function run() {
       createComment = false;
     }
 
-    if (context.eventName === "pull_request") {
-      core.info(
-        `Found PR # ${context.issue.number} from workflow context - proceeding to comment.`,
-      );
+    if (
+      context.eventName === "pull_request" ||
+      context.eventName === "workflow_call"
+    ) {
+      // Verify we have PR context available in the case that it's a workflow_call event- should always pass for pull_request
+      if (context.issue && context.issue.number) {
+        core.info(
+          `Found PR # ${context.issue.number} from ${context.eventName} event - proceeding to comment.`,
+        );
+      } else {
+        core.info(
+          `${context.eventName} event detected but no PR context available.`,
+        );
+        core.info("Skipping comment creation.");
+        createComment = false;
+      }
     } else {
       core.info("Action doesn't seem to be running in a PR workflow context.");
       core.info("Skipping comment creation.");
