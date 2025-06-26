@@ -175,7 +175,7 @@ const output = () => {
         // there will be formatting error when comment is
         // showed on GitHub
         body += `
-${commentHeader} for ${file}
+${commentHeader} for `${file}`
 <details ${expandDetailsComment ? "open" : ""}>
 <summary>
 <b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ""}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
