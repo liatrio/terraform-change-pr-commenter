@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
 
@@ -65,6 +66,30 @@ jobs:
         with:
           json-file: test-data/tf_noresources.json
 
+      - name: Test multiple json files
+        id: multiple_files
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+
+      - name: Assert multiple json files output
+        run: |
+          node -e "
+            const output = process.env.COMMENT_BODY;
+            if (!output.includes('Terraform Plan Changes for test-data/tf_test.json')) {
+              console.error('Assertion failed: Missing header for tf_test.json');
+              process.exit(1);
+            }
+            if (!output.includes('Terraform Plan Changes for test-data/tf_test2.json')) {
+              console.error('Assertion failed: Missing header for tf_test2.json');
+              process.exit(1);
+            }
+          "
+        env:
+          COMMENT_BODY: ${{ steps.multiple_files.outputs.comment-body }}
+
   matrix-plan:
     runs-on: ubuntu-latest
     strategy:
@@ -76,6 +101,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
 
