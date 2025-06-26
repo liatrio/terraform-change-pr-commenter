@@ -65,6 +65,15 @@ jobs:
         with:
           json-file: test-data/tf_noresources.json
 
+      - name: Test PR Commenter with large plan
+        uses: ./
+        with:
+          json-file: test-data/tf_test_large.json
+          comment-header: "Large Plan Test"
+          # We expect the comment to be truncated, so we don't need to check the full content
+          # Just ensure the action runs without error and the summary is present
+          include-plan-job-summary: true
+
   matrix-plan:
     runs-on: ubuntu-latest
     strategy:
