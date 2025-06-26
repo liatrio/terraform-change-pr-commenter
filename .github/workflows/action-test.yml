@@ -76,7 +76,7 @@ jobs:
         run: |
           node -e "
             const output = process.env.COMMENT_BODY;
-            if (!output.includes('Terraform Plan Changes for test-data/tf_test.json')) {
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
               console.error('Assertion failed: Missing header for tf_test.json');
               process.exit(1);
             }
@@ -96,11 +96,11 @@ jobs:
         run: |
           node -e "
             const output = process.env.COMMENT_BODY;
-            if (!output.includes('Terraform Plan Changes for test-data/tf_test.json')) {
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
               console.error('Assertion failed: Missing header for tf_test.json');
               process.exit(1);
             }
-            if (!output.includes('Terraform Plan Changes for test-data/tf_test2.json')) {
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test2.json`')) {
               console.error('Assertion failed: Missing header for tf_test2.json');
               process.exit(1);
             }
@@ -122,11 +122,11 @@ jobs:
         run: |
           node -e "
             const output = process.env.COMMENT_BODY;
-            if (!output.includes('Terraform Plan Changes for test-data/tf_test.json')) {
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
               console.error('Assertion failed: Missing header for tf_test.json');
               process.exit(1);
             }
-            if (!output.includes('Terraform Plan Changes for test-data/tf_test2.json')) {
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test2.json`')) {
               console.error('Assertion failed: Missing header for tf_test2.json');
               process.exit(1);
             }
