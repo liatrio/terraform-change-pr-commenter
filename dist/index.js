@@ -12838,6 +12838,8 @@ const includeUnchangedResources = core.getBooleanInput(
   "include-unchanged-resources",
 );
 
+const MAX_COMMENT_LENGTH = 65536;
+
 // Get current job name from GitHub environment variable
 const currentJobName = process.env.GITHUB_JOB || "";
 const currentRunnerName = process.env.RUNNER_NAME || "";
@@ -12990,11 +12992,13 @@ const output = () => {
         // the body must be indented at the start otherwise
         // there will be formatting error when comment is
         // showed on GitHub
-        body += `
+        let planSummary = `<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ""}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>`;
+
+        let fullBody = `
 ${commentHeader}
 <details ${expandDetailsComment ? "open" : ""}>
 <summary>
-<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ""}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>
+${planSummary}
 </summary>
 ${includeUnchangedResources ? details("unchanged", resources_unchanged, "•") : ""}
 ${details("create", resources_to_create, "+")}
@@ -13007,6 +13011,19 @@ ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
 ${workflowLink}
 ${jobLink}
 `;
+
+        if (fullBody.length > MAX_COMMENT_LENGTH) {
+          body += `
+${commentHeader}
+${planSummary}
+<p>Sorry, the detailed plan exceeded GitHub's comment size limit (${MAX_COMMENT_LENGTH} characters) and has been truncated. Please see the workflow run for the full plan output.</p>
+${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
+${workflowLink}
+${jobLink}
+`;
+        } else {
+          body += fullBody;
+        }
         if (
           resources_to_create +
             resources_to_delete +
