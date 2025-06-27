@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.12.0...v1.13.0) (2025-06-27)
+
+
+### Features
+
+* Truncate PR comments if too long ([#93](https://github.com/liatrio/terraform-change-pr-commenter/issues/93)) ([5587334](https://github.com/liatrio/terraform-change-pr-commenter/commit/55873345015c06f59316309a71ea9433104ed5f9)), closes [#91](https://github.com/liatrio/terraform-change-pr-commenter/issues/91)
+
 # [1.12.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.11.0...v1.12.0) (2025-06-27)
 
 
