@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.11.0...v1.12.0) (2025-06-27)
+
+
+### Features
+
+* Simplify comment-header logic and improve multi-file support ([#92](https://github.com/liatrio/terraform-change-pr-commenter/issues/92)) ([de714c9](https://github.com/liatrio/terraform-change-pr-commenter/commit/de714c9edf0859d9851946cd93864c3b789e626a))
+
 # [1.11.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.10.1...v1.11.0) (2025-06-16)
 
 
