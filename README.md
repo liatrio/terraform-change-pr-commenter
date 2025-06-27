@@ -55,7 +55,7 @@ Implementing this Action is _super_ simple and the comments are consise and easy
 
 **Optional** Defaults to `Terraform Plan Changes`
 
-- Will set the header of the PR comment and/or workflow summary.
+- Will set the header of the PR comment and/or workflow summary. The filename will always be appended to this header.
 
 ### `comment-footer`
 
