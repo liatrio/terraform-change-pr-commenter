@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
 
@@ -73,6 +74,74 @@ jobs:
           # We expect the comment to be truncated, so we don't need to check the full content
           # Just ensure the action runs without error and the summary is present
           include-plan-job-summary: true
+          
+      - name: Test PR comment hiding with default header
+        id: hide_default_header
+        uses: ./
+        with:
+          json-file: test-data/tf_test.json
+          hide-previous-comments: true
+      - name: Assert PR comment hiding with default header
+        run: |
+          node -e "
+            const output = process.env.COMMENT_BODY;
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
+              console.error('Assertion failed: Missing header for tf_test.json');
+              process.exit(1);
+            }
+          "
+        env:
+          COMMENT_BODY: ${{ steps.hide_default_header.outputs.comment-body }}
+
+      - name: Test multiline json files with hide previous comments and default header
+        id: multiline_hide_default
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+          hide-previous-comments: true
+      - name: Assert multiline json files with hide previous comments and default header
+        run: |
+          node -e "
+            const output = process.env.COMMENT_BODY;
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
+              console.error('Assertion failed: Missing header for tf_test.json');
+              process.exit(1);
+            }
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test2.json`')) {
+              console.error('Assertion failed: Missing header for tf_test2.json');
+              process.exit(1);
+            }
+          "
+        env:
+          COMMENT_BODY: ${{ steps.multiline_hide_default.outputs.comment-body }}
+
+      
+
+      - name: Test multiple json files
+        id: multiple_files
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+
+      - name: Assert multiple json files output
+        run: |
+          node -e "
+            const output = process.env.COMMENT_BODY;
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test.json`')) {
+              console.error('Assertion failed: Missing header for tf_test.json');
+              process.exit(1);
+            }
+            if (!output.includes('Terraform Plan Changes for `test-data/tf_test2.json`')) {
+              console.error('Assertion failed: Missing header for tf_test2.json');
+              process.exit(1);
+            }
+          "
+        env:
+          COMMENT_BODY: ${{ steps.multiple_files.outputs.comment-body }}
 
   matrix-plan:
     runs-on: ubuntu-latest
@@ -85,6 +154,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
 

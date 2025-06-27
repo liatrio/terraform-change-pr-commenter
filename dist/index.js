@@ -12995,7 +12995,7 @@ const output = () => {
         let planSummary = `<b>Terraform Plan: ${resources_to_create.length} to be created, ${resources_to_delete.length} to be deleted, ${resources_to_update.length} to be updated${includeTagOnlyResources ? `, ${resources_to_tag.length} to be tagged` : ""}, ${resources_to_replace.length} to be replaced, ${resources_unchanged.length} unchanged.</b>`;
 
         let fullBody = `
-${commentHeader}
+${commentHeader} for \`${file}\`
 <details ${expandDetailsComment ? "open" : ""}>
 <summary>
 ${planSummary}
@@ -13014,7 +13014,7 @@ ${jobLink}
 
         if (fullBody.length > MAX_COMMENT_LENGTH) {
           body += `
-${commentHeader}
+${commentHeader} for \`${file}\`
 ${planSummary}
 <p>Sorry, the detailed plan exceeded GitHub's comment size limit (${MAX_COMMENT_LENGTH} characters) and has been truncated. Please see the workflow run for the full plan output.</p>
 ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
@@ -13124,6 +13124,14 @@ const hideComments = () => {
       );
 
       core.info(
+        `Filtered down to ${filteredComments.length} comments created by this action.`,
+      );
+
+      filteredComments = filteredComments.filter((comment) =>
+        comment.body.includes(commentHeader),
+      );
+
+      core.info(
         `Filtered down to ${filteredComments.length} comments that need to be minimized.`,
       );
 
@@ -13222,6 +13230,7 @@ async function run() {
       });
       core.info("Comment added successfully.");
     }
+    core.setOutput("comment-body", rawOutput);
   } catch (error) {
     core.setFailed(error.message);
   }
