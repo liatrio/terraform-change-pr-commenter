@@ -1,35 +1,41 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: liatrio/terraform-change-pr-commenter
-  # description: Add a useful description before merging
+  # Component names should be simple and URL-friendly
+  name: terraform-change-pr-commenter
+  description: >-
+    GitHub Action that parses Terraform plan JSON files, summarizes the changes,
+    and posts concise comments (and optional workflow summaries) to pull requests.
 
-  # Annotations Docs: https://backstage.io/docs/features/software-catalog/well-known-annotations
+  # Annotations — see https://backstage.io/docs/features/software-catalog/well-known-annotations
   annotations:
     github.com/project-slug: liatrio/terraform-change-pr-commenter
 
-  # Tags Docs: https://backstage.io/docs/features/software-catalog/descriptor-format/#metadatatags-optional
   tags:
     - javascript
     - terraform
     - github-action
+    - ci
+    - iac
 
-  # Links Docs: https://backstage.io/docs/features/software-catalog/descriptor-format/#links-optional
-  # links:
-  #   - url: https://example.com/user
-  #     title: Examples Users
-  #     icon: user
-  #   - url: https://example.com/group
-  #     title: Example Group
-  #     icon: group
+  links:
+    - url: https://github.com/liatrio/terraform-change-pr-commenter
+      title: Source Repository
+      icon: github
+    - url: https://github.com/marketplace/actions/terraform-change-pr-commenter
+      title: GitHub Marketplace Listing
+      icon: marketplace
+
 
 spec:
-  # https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required
-  type: service
+  # component category, e.g. service, library, tool, website …
+  type: library
   # Review lifecycle and pick one of the three that make the most sense.
   # https://backstage.io/docs/features/software-catalog/descriptor-format/#speclifecycle-required
   lifecycle: production
-  # Please update to include the GitHub Team name tied to this project.
-  # https://backstage.io/docs/features/software-catalog/descriptor-format/#specowner-required
-  owner: liatrio-team-members
+  owner: platform-engineering
+  system: developer-platform
+  dependsOn: []
+  consumesApis: []
+  providesApis: []
 
