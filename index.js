@@ -355,9 +355,9 @@ async function run() {
     console.log("hidePreviousComments", hidePreviousComments);
     console.log(
       "hidePreviousComments && context.eventName === pull_request",
-      hidePreviousComments && context.eventName === "pull_request",
+      hidePreviousComments && (context.eventName === "pull_request" || context.eventName === "pull_request_target"),
     );
-    if (hidePreviousComments && context.eventName === "pull_request") {
+    if (hidePreviousComments && (context.eventName === "pull_request" || context.eventName === "pull_request_target")) {
       hideComments();
     }
 
@@ -383,6 +383,7 @@ async function run() {
 
     if (
       context.eventName === "pull_request" ||
+      context.eventName === "pull_request_target" ||
       context.eventName === "workflow_call"
     ) {
       // Verify we have PR context available in the case that it's a workflow_call event- should always pass for pull_request

@@ -2,6 +2,7 @@ name: Action Tester Workflow
 
 on:
   pull_request:
+  pull_request_target:
   workflow_call:
     inputs:
       test-mode:
@@ -172,7 +173,27 @@ jobs:
           include-tag-only-resources: true
           include-unchanged-resources: true
 
-  # Test workflow_call functionality by calling a reusable workflow
+    # Additional tests for pull_request_target event
+  plan-pr-target:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn run build
+
+      - name: Test PR Commenter (pull_request_target)
+        uses: ./
+        with:
+          json-file: test-data/tf_test.json
+          hide-previous-comments: true
+          comment-header: "PR Target Event Test"
+
+# Test workflow_call functionality by calling a reusable workflow
   test-reusable-workflow:
     if: github.event_name == 'pull_request'
     uses: ./.github/workflows/reusable-terraform-test.yml
