@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.13.0...v1.14.0) (2025-07-01)
+
+
+### Features
+
+* **action:** add support for `pull_request_target` event ([#95](https://github.com/liatrio/terraform-change-pr-commenter/issues/95)) ([fdfdbae](https://github.com/liatrio/terraform-change-pr-commenter/commit/fdfdbae2c1dbf02ed6a6334a334b99d2ed28f531)), closes [#94](https://github.com/liatrio/terraform-change-pr-commenter/issues/94)
+
 # [1.13.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.12.0...v1.13.0) (2025-06-27)
 
 
