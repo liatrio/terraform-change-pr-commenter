@@ -1,0 +1,219 @@
+name: Recent Changes Report with AI Analysis
+
+on:
+  schedule:
+    # Default: Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch to analyze'
+        required: false
+        default: 'main'
+        type: string
+      days_back:
+        description: 'Number of days back to analyze'
+        required: false
+        default: '7'
+        type: string
+      report_format:
+        description: 'Report output format'
+        required: false
+        default: 'comment'
+        type: choice
+        options:
+          - comment
+          - artifact
+          - issue
+      model_name:
+        description: 'GitHub Model to use for analysis'
+        required: false
+        default: 'openai/gpt-4o'
+        type: choice
+        options:
+          - openai/gpt-4.1
+          - openai/gpt-4o-mini
+
+env:
+  TARGET_BRANCH: ${{ github.event.inputs.target_branch || 'main' }}
+  DAYS_BACK: ${{ github.event.inputs.days_back || '7' }}
+  REPORT_FORMAT: ${{ github.event.inputs.report_format || 'comment' }}
+  MODEL_NAME: ${{ github.event.inputs.model_name || 'openai/gpt-4o' }}
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  actions: read
+  models: read
+
+jobs:
+  generate-change-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.TARGET_BRANCH }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get recent changes
+        id: get-changes
+        run: |
+          # Calculate the date for the lookback period
+          SINCE_DATE=$(date -d "${{ env.DAYS_BACK }} days ago" +%Y-%m-%d)
+          echo "since_date=$SINCE_DATE" >> $GITHUB_OUTPUT
+          
+          # Get commits from the specified period
+          echo "## Recent Commits" > changes.md
+          git log --since="$SINCE_DATE" --pretty=format:"- **%h** %s (%an, %ar)" --no-merges >> changes.md
+          echo "" >> changes.md
+          echo "" >> changes.md
+          
+          # Get file changes summary
+          echo "## Files Changed" >> changes.md
+          git diff --name-status HEAD~$(git rev-list --count --since="$SINCE_DATE" HEAD) HEAD | head -20 >> changes.md
+          echo "" >> changes.md
+          
+          # Get detailed diff for analysis (limited to avoid token limits)
+          echo "## Recent Changes Detail" >> changes.md
+          git diff --stat HEAD~$(git rev-list --count --since="$SINCE_DATE" HEAD) HEAD >> changes.md
+          
+          # Store changes for AI analysis
+          cat changes.md
+
+      - name: Get pull requests from period
+        id: get-prs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SINCE_DATE=$(date -d "${{ env.DAYS_BACK }} days ago" +%Y-%m-%d)
+          echo "## Recent Pull Requests" >> changes.md
+          gh pr list --state merged --limit 10 --json number,title,author,mergedAt,url | \
+            jq -r '.[] | select(.mergedAt >= "'$SINCE_DATE'") | "- **#\(.number)** \(.title) by @\(.author.login) - \(.url)"' >> changes.md || true
+          echo "" >> changes.md
+
+      - name: Analyze changes with GitHub Models
+        id: analyze-changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create the analysis prompt
+          cat > prompt.txt << 'EOF'
+          You are a senior software engineer reviewing recent changes to a codebase. Please analyze the following changes and provide a comprehensive report that includes:
+
+          1. **Summary**: A brief overview of what changed
+          2. **Key Changes**: The most significant modifications
+          3. **Impact Assessment**: Potential impact on the system
+          4. **Risk Analysis**: Any potential risks or concerns
+          5. **Recommendations**: Suggestions for follow-up actions
+
+          Please be concise but thorough. Focus on technical insights and actionable information.
+
+          Recent Changes:
+          EOF
+          
+          cat changes.md >> prompt.txt
+          
+          # Call GitHub Models API using the official endpoint
+          RESPONSE=$(curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -d "{
+              \"messages\": [
+                {
+                  \"role\": \"user\",
+                  \"content\": $(cat prompt.txt | jq -Rs .)
+                }
+              ],
+              \"model\": \"${{ env.MODEL_NAME }}\"
+            }" \
+            "https://models.github.ai/inference/chat/completions" 2>/dev/null)
+          
+          # Extract the analysis from the response
+          ANALYSIS=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "Analysis failed - please check GitHub Models configuration and permissions"')
+          
+          # Save analysis to file
+          echo "$ANALYSIS" > analysis.md
+          
+          # Set output for later steps
+          echo "analysis_file=analysis.md" >> $GITHUB_OUTPUT
+
+      - name: Create final report
+        id: create-report
+        run: |
+          cat > final_report.md << EOF
+          # 📊 Recent Changes Report
+          
+          **Branch:** \`${{ env.TARGET_BRANCH }}\`  
+          **Period:** Last ${{ env.DAYS_BACK }} days  
+          **Generated:** $(date)  
+          **Model:** ${{ env.MODEL_NAME }}
+          
+          ---
+          
+          EOF
+          
+          # Add the AI analysis
+          cat analysis.md >> final_report.md
+          
+          echo "" >> final_report.md
+          echo "---" >> final_report.md
+          echo "" >> final_report.md
+          
+          # Add raw changes for reference
+          cat changes.md >> final_report.md
+          
+          echo "report_file=final_report.md" >> $GITHUB_OUTPUT
+
+      - name: Output as PR comment
+        if: env.REPORT_FORMAT == 'comment' && github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Find the most recent PR to comment on, or create a discussion
+          RECENT_PR=$(gh pr list --state open --limit 1 --json number | jq -r '.[0].number // empty')
+          
+          if [ -n "$RECENT_PR" ]; then
+            gh pr comment $RECENT_PR --body-file final_report.md
+            echo "Report added as comment to PR #$RECENT_PR"
+          else
+            echo "No open PRs found. Report saved as artifact instead."
+          fi
+
+      - name: Create issue with report
+        if: env.REPORT_FORMAT == 'issue'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="📊 Weekly Changes Report - $(date +%Y-%m-%d)"
+          gh issue create --title "$TITLE" --body-file final_report.md --label "report,automated"
+          echo "Report created as issue: $TITLE"
+
+      - name: Upload report as artifact
+        if: env.REPORT_FORMAT == 'artifact' || (env.REPORT_FORMAT == 'comment' && github.event_name == 'schedule')
+        uses: actions/upload-artifact@v4
+        with:
+          name: change-report-${{ env.TARGET_BRANCH }}-${{ github.run_number }}
+          path: |
+            final_report.md
+            changes.md
+            analysis.md
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## 📊 Change Report Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ env.TARGET_BRANCH }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Period:** Last ${{ env.DAYS_BACK }} days" >> $GITHUB_STEP_SUMMARY
+          echo "- **Format:** ${{ env.REPORT_FORMAT }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Model:** ${{ env.MODEL_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Quick Preview" >> $GITHUB_STEP_SUMMARY
+          head -20 final_report.md >> $GITHUB_STEP_SUMMARY
