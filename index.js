@@ -78,7 +78,7 @@ async function getJobId() {
   return "";
 }
 
-var hasNoChanges = false;
+var hasNoChanges = true;
 
 // GraphQL queries and mutations used for hiding previous comments
 const minimizeCommentQuery = /* GraphQL */ `
@@ -109,6 +109,7 @@ const output = () => {
   let body = "";
   // for each file
   for (const file of inputFilenames) {
+    let fileHasNoChanges = true;
     const resource_changes =
       JSON.parse(fs.readFileSync(file)).resource_changes || [];
     try {
@@ -156,6 +157,8 @@ const output = () => {
               break;
             case "create":
               resources_to_create.push(address);
+              hasNoChanges = false;
+              fileHasNoChanges = false;
               break;
             case "delete":
               if (change.actions.length > 1) {
@@ -163,6 +166,8 @@ const output = () => {
               } else {
                 resources_to_delete.push(address);
               }
+              hasNoChanges = false;
+              fileHasNoChanges = false;
               break;
             case "update":
               if (isTagOnlyChange(change.before, change.after)) {
@@ -170,6 +175,8 @@ const output = () => {
               } else {
                 resources_to_update.push(address);
               }
+              hasNoChanges = false;
+              fileHasNoChanges = false;
               break;
           }
         }
@@ -206,25 +213,15 @@ ${workflowLink}
 ${jobLink}
 `;
         } else {
-          body += fullBody;
-        }
-        if (
-          resources_to_create +
-            resources_to_delete +
-            resources_to_update +
-            resources_to_tag +
-            resources_to_replace ==
-          []
-        ) {
-          hasNoChanges = true;
+          if (quietMode && fileHasNoChanges) {
+            console.log(`Quiet Mode: ${file} has no changes, skipping output to comment`);
+          } else {
+            body += fullBody;
+          }
         }
       } else {
-        hasNoChanges = true;
-        console.log(
-          "No changes found in the plan. setting hasNoChanges to true.",
-        );
         body += `
-<p>There were no changes done to the infrastructure.</p>
+<p>There were no changes planned to the infrastructure.</p>
 `;
         core.info(
           `"The content of ${file} did not result in a valid array or the array is empty... Skipping."`,
