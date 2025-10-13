@@ -62,6 +62,25 @@ jobs:
         with:
           json-file: test-data/tf_nochanges.json
 
+      - name: Test Multi File with no changes
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+            test-data/tf_nochanges.json
+          comment-header: "Multi File with No Changes"
+
+      - name: Test Multi File with no changes, but quiet
+        uses: ./
+        with:
+          json-file: |
+            test-data/tf_test.json
+            test-data/tf_test2.json
+            test-data/tf_nochanges.json
+          comment-header: "Multi File with No Changes"
+          quiet: "true"
+
       - name: Test PR Commenter with no resources
         uses: ./
         with:
