@@ -78,7 +78,7 @@ async function getJobId() {
   return "";
 }
 
-var hasNoChanges = false;
+var allFilesHaveNoChanges = true;
 
 // GraphQL queries and mutations used for hiding previous comments
 const minimizeCommentQuery = /* GraphQL */ `
@@ -196,8 +196,21 @@ ${workflowLink}
 ${jobLink}
 `;
 
-        if (fullBody.length > MAX_COMMENT_LENGTH) {
-          body += `
+        const hasChangesInFile =
+          resources_to_create.length > 0 ||
+          resources_to_delete.length > 0 ||
+          resources_to_update.length > 0 ||
+          resources_to_tag.length > 0 ||
+          resources_to_replace.length > 0;
+
+        if (hasChangesInFile) {
+          allFilesHaveNoChanges = false;
+        }
+
+        // In quiet mode, skip adding to body if this file has no changes
+        if (!quietMode || hasChangesInFile) {
+          if (fullBody.length > MAX_COMMENT_LENGTH) {
+            body += `
 ${commentHeader} for \`${file}\`
 ${planSummary}
 <p>Sorry, the detailed plan exceeded GitHub's comment size limit (${MAX_COMMENT_LENGTH} characters) and has been truncated. Please see the workflow run for the full plan output.</p>
@@ -205,27 +218,22 @@ ${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
 ${workflowLink}
 ${jobLink}
 `;
-        } else {
-          body += fullBody;
-        }
-        if (
-          resources_to_create +
-            resources_to_delete +
-            resources_to_update +
-            resources_to_tag +
-            resources_to_replace ==
-          []
-        ) {
-          hasNoChanges = true;
+          } else {
+            body += fullBody;
+          }
         }
       } else {
-        hasNoChanges = true;
+        // Only log this message, don't affect the allFilesHaveNoChanges flag
+        // since empty resource_changes means no changes for this specific file
         console.log(
-          "No changes found in the plan. setting hasNoChanges to true.",
+          "No changes found in the plan for this file.",
         );
-        body += `
+        // In quiet mode, don't add "no changes" message to body
+        if (!quietMode) {
+          body += `
 <p>There were no changes done to the infrastructure.</p>
 `;
+        }
         core.info(
           `"The content of ${file} did not result in a valid array or the array is empty... Skipping."`,
         );
@@ -371,9 +379,9 @@ async function run() {
     }
 
     console.log("quietMode", quietMode);
-    console.log("hasNoChanges", hasNoChanges);
-    console.log("quietMode && hasNoChanges", quietMode && hasNoChanges);
-    if (quietMode && hasNoChanges) {
+    console.log("allFilesHaveNoChanges", allFilesHaveNoChanges);
+    console.log("quietMode && allFilesHaveNoChanges", quietMode && allFilesHaveNoChanges);
+    if (quietMode && allFilesHaveNoChanges) {
       core.info(
         "quiet mode is enabled and there are no changes to the infrastructure.",
       );

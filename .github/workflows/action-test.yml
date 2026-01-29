@@ -144,6 +144,29 @@ jobs:
         env:
           COMMENT_BODY: ${{ steps.multiple_files.outputs.comment-body }}
 
+      - name: Test multiple json files with mixed changes (quiet)
+        uses: ./
+        with:
+          comment-header: Plan for multiple files, one unchanged, and quiet true
+          json-file: |
+            test-data/tf_nochanges.json
+            test-data/tf_test2.json
+          quiet: true
+          expand-comment: true
+          include-plan-job-summary: true
+          include-workflow-link: true
+
+      - name: Test multiple json files with mixed changes (not quiet)
+        uses: ./
+        with:
+          comment-header: Plan for multiple files, one unchanged, and quiet false
+          json-file: |
+            test-data/tf_nochanges.json
+            test-data/tf_test2.json
+          expand-comment: true
+          include-plan-job-summary: true
+          include-workflow-link: true
+
   matrix-plan:
     runs-on: ubuntu-latest
     strategy:
