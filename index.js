@@ -78,7 +78,7 @@ async function getJobId() {
   return "";
 }
 
-var hasNoChanges = false;
+var allFilesHaveNoChanges = true;
 
 // GraphQL queries and mutations used for hiding previous comments
 const minimizeCommentQuery = /* GraphQL */ `
@@ -208,20 +208,21 @@ ${jobLink}
         } else {
           body += fullBody;
         }
-        if (
-          resources_to_create +
-            resources_to_delete +
-            resources_to_update +
-            resources_to_tag +
-            resources_to_replace ==
-          []
-        ) {
-          hasNoChanges = true;
+        const hasChangesInFile =
+          resources_to_create.length > 0 ||
+          resources_to_delete.length > 0 ||
+          resources_to_update.length > 0 ||
+          resources_to_tag.length > 0 ||
+          resources_to_replace.length > 0;
+
+        if (hasChangesInFile) {
+          allFilesHaveNoChanges = false;
         }
       } else {
-        hasNoChanges = true;
+        // Only log this message, don't affect the allFilesHaveNoChanges flag
+        // since empty resource_changes means no changes for this specific file
         console.log(
-          "No changes found in the plan. setting hasNoChanges to true.",
+          "No changes found in the plan for this file.",
         );
         body += `
 <p>There were no changes done to the infrastructure.</p>
@@ -371,9 +372,9 @@ async function run() {
     }
 
     console.log("quietMode", quietMode);
-    console.log("hasNoChanges", hasNoChanges);
-    console.log("quietMode && hasNoChanges", quietMode && hasNoChanges);
-    if (quietMode && hasNoChanges) {
+    console.log("allFilesHaveNoChanges", allFilesHaveNoChanges);
+    console.log("quietMode && allFilesHaveNoChanges", quietMode && allFilesHaveNoChanges);
+    if (quietMode && allFilesHaveNoChanges) {
       core.info(
         "quiet mode is enabled and there are no changes to the infrastructure.",
       );
