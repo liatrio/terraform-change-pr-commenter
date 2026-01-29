@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.14.0...v1.14.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* quiet mode for multiple files ([#99](https://github.com/liatrio/terraform-change-pr-commenter/issues/99)) ([f872e48](https://github.com/liatrio/terraform-change-pr-commenter/commit/f872e48129a4d2af4e811902e75c923954dfa471))
+
 # [1.14.0](https://github.com/liatrio/terraform-change-pr-commenter/compare/v1.13.0...v1.14.0) (2025-07-01)
 
 
