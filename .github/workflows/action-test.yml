@@ -145,7 +145,6 @@ jobs:
           COMMENT_BODY: ${{ steps.multiple_files.outputs.comment-body }}
 
       - name: Test multiple json files with mixed changes (quiet)
-        id: multiple_files
         uses: ./
         with:
           comment-header: Plan for multiple files, one unchanged, and quiet true
@@ -155,7 +154,6 @@ jobs:
           quiet: true
 
       - name: Test multiple json files with mixed changes (not quiet)
-        id: multiple_files
         uses: ./
         with:
           comment-header: Plan for multiple files, one unchanged, and quiet false
