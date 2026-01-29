@@ -4,6 +4,8 @@ on:
     branches: [main]
   release:
     types: [published]
+permissions:
+  contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
