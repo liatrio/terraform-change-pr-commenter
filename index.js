@@ -196,18 +196,6 @@ ${workflowLink}
 ${jobLink}
 `;
 
-        if (fullBody.length > MAX_COMMENT_LENGTH) {
-          body += `
-${commentHeader} for \`${file}\`
-${planSummary}
-<p>Sorry, the detailed plan exceeded GitHub's comment size limit (${MAX_COMMENT_LENGTH} characters) and has been truncated. Please see the workflow run for the full plan output.</p>
-${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
-${workflowLink}
-${jobLink}
-`;
-        } else {
-          body += fullBody;
-        }
         const hasChangesInFile =
           resources_to_create.length > 0 ||
           resources_to_delete.length > 0 ||
@@ -218,15 +206,34 @@ ${jobLink}
         if (hasChangesInFile) {
           allFilesHaveNoChanges = false;
         }
+
+        // In quiet mode, skip adding to body if this file has no changes
+        if (!quietMode || hasChangesInFile) {
+          if (fullBody.length > MAX_COMMENT_LENGTH) {
+            body += `
+${commentHeader} for \`${file}\`
+${planSummary}
+<p>Sorry, the detailed plan exceeded GitHub's comment size limit (${MAX_COMMENT_LENGTH} characters) and has been truncated. Please see the workflow run for the full plan output.</p>
+${commentFooter.map((a) => (a == "" ? "\n" : a)).join("\n")}
+${workflowLink}
+${jobLink}
+`;
+          } else {
+            body += fullBody;
+          }
+        }
       } else {
         // Only log this message, don't affect the allFilesHaveNoChanges flag
         // since empty resource_changes means no changes for this specific file
         console.log(
           "No changes found in the plan for this file.",
         );
-        body += `
+        // In quiet mode, don't add "no changes" message to body
+        if (!quietMode) {
+          body += `
 <p>There were no changes done to the infrastructure.</p>
 `;
+        }
         core.info(
           `"The content of ${file} did not result in a valid array or the array is empty... Skipping."`,
         );
