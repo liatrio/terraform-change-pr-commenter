@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
@@ -75,7 +75,7 @@ jobs:
           # We expect the comment to be truncated, so we don't need to check the full content
           # Just ensure the action runs without error and the summary is present
           include-plan-job-summary: true
-          
+
       - name: Test PR comment hiding with default header
         id: hide_default_header
         uses: ./
@@ -118,7 +118,7 @@ jobs:
         env:
           COMMENT_BODY: ${{ steps.multiline_hide_default.outputs.comment-body }}
 
-      
+
 
       - name: Test multiple json files
         id: multiple_files
@@ -177,7 +177,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
@@ -204,7 +204,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn run build
