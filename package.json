@@ -12,7 +12,7 @@
     "url": "https://github.com/liatrio/terraform-change-pr-commenter.git"
   },
   "engines": {
-    "node": "20"
+    "node": "24"
   },
   "release": {
     "branches": [
